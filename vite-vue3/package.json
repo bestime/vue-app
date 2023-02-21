@@ -14,6 +14,9 @@
     "vue": "^3.2.37",
     "vue-router": "^4.1.5"
   },
+  "pre-commit": [
+    "lint-staged"
+  ],
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
