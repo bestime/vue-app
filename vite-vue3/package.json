@@ -7,7 +7,8 @@
     "dev": "vite --mode development",
     "build:history": "vue-tsc --noEmit && vite build --mode production_history",
     "build:hash": "vue-tsc --noEmit && vite build --mode production_hash",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.2.37",
