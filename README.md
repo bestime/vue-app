@@ -1,27 +1,46 @@
-# [前端]人工影响天气智能安全防护系统
+# v4
 
-注意：图片、字体、json 等静态资源，不要放在`scr`下任何目录，请放在`public/static`文件夹
+This template should help get you started developing with Vue 3 in Vite.
 
-项目导航:
+## Recommended IDE Setup
 
-1.  [项目规范](https://github.com/bestime/code-standard)
-2.  [构建命令](#构建命令)
-3.  [项目配置](#项目配置)
-4.  [自定义环境变量](#自定义环境变量)
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## 项目配置
+## Type Support for `.vue` Imports in TS
 
-- 构建工具采用 vite
-- 前端框架采用 vue3
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-## 构建命令
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-- `npm run dev` 开发模式
-- `npm run build:hash` 发布模式（hash）
-- `npm run build:history` 发布模式（history）
-- `npm run preview` 预览
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## 自定义环境变量
+## Customize configuration
 
-- VITE_ROUTER_MODE - 路由模式。支持 hash 和 history
-- VITE_ROUTER_BASE - 项目 baseUrl，会直接影响系统变量 BASE_URL
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```
