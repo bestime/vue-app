@@ -21,7 +21,16 @@ module.exports = {
   // 字符串使用单引号
   singleQuote: true,
 
+  // 字面量括号之间打印空格
+  bracketSpacing: true,
+
   htmlWhitespaceSensitivity: 'ignore',
 
+  // 文件换行符
+  endOfLine: 'lf',
+
   trailingComma: 'es5',
+  
+  embeddedLanguageFormatting: 'off',
+  
 };

@@ -1,23 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { envConfig } from '@/utils/common';
+import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import checkRepeatRouteNames from './utils/checkRepeatRouteNames';
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
+const routeList: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    name: 'ROUTE_HOME',
+    redirect: {
+      name: 'ROUTE_LEVEL_ONE_TWO',
     },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-  ],
+    children: [
+      {
+        path: 'level01',
+        name: 'ROUTE_LEVEL_ONE',
+        component: () => import('@/views/LevelOne/index.vue'),
+        children: [
+          {
+            path: 'level02',
+            name: 'ROUTE_LEVEL_ONE_TWO',
+            component: () => import('@/views/LevelOne/views/LevelTwo/index.vue'),
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const iRouter = createRouter({
+  history: envConfig.routeMode === 'history' ? createWebHistory(envConfig.baseURL) : createWebHashHistory(),
+  routes: checkRepeatRouteNames(routeList),
 });
 
-export default router;
+export default iRouter;
