@@ -2,6 +2,7 @@ import axios from 'axios';
 import serverURL from './libs/serverURL';
 
 const a = ''
+const b = ''
 
 const axiosInstance = axios.create({
   baseURL: '',
