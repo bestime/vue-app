@@ -1,11 +1,6 @@
 import axios from 'axios';
 import serverURL from './libs/serverURL';
 
-const a = ''
-const b = ''
-const c = ''
-const d = ''
-
 const axiosInstance = axios.create({
   baseURL: '',
 });
