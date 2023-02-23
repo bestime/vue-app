@@ -6,7 +6,7 @@ const axiosInstance = axios.create({
 });
 
 /**
- * 项目网路请求入口
+ * 项目网络请求入口
  * @param options 请求配置
  * @returns 请求结果
  */

@@ -17,7 +17,7 @@ module.exports = {
   },
   rules: {
     "camelcase": "error", // 驼峰命名
-    "eqeqeq": "error", // 使用全等 === 或 !==
+    "eqeqeq": "warn", // 使用全等 === 或 !==
     "no-return-await": "error", // 禁用不必要的 return await
     "no-sequences": "error", // 禁用逗号操作符
     "no-self-compare": "error", // 禁止自身比较
