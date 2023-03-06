@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import serverURL from '@/request/libs/serverURL';
 
-const imgUrl = serverURL('@local', '/static/images/01.png?t=4')
+const imgUrl = serverURL('@local', '/static/images/01.png?t=4');
 </script>
 
 <template>
@@ -37,10 +37,9 @@ const imgUrl = serverURL('@local', '/static/images/01.png?t=4')
       height: 100%;
     }
     &.cssbg {
-      background-image: url("/static/images/01.png");
+      background-image: url('/static/images/01.png');
       background-size: 100% 100%;
     }
   }
-
 }
 </style>
