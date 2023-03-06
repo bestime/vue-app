@@ -2,13 +2,6 @@ module.exports = {
   // 换行长度，默认80
   printWidth: 120,
 
-  // vscode编辑器没有这项，部分配置项，不生效
-  overrides: [
-    {
-      files: '.prettierrc.cjs',
-    },
-  ],
-
   // tab缩进大小,默认为2
   tabWidth: 2,
 
@@ -17,6 +10,9 @@ module.exports = {
 
   // 每行末尾添加分号
   semi: true,
+
+  // 箭头函数的参数必须使用括号包起来
+  arrowParens: 'always',
 
   // 字符串使用单引号
   singleQuote: true,
@@ -29,8 +25,6 @@ module.exports = {
   // 文件换行符
   endOfLine: 'lf',
 
-  trailingComma: 'es5',
-  
-  embeddedLanguageFormatting: 'off',
+  trailingComma: 'es5'
   
 };
