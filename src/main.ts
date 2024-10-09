@@ -9,5 +9,5 @@ app.use(router)
 
 
 const buildTime = dayjs(window.viteBuildTime).format('YYYY-MM-DD HH:mm:ss')
-console.log("项目打包时间222", buildTime)
+console.log(`%c 项目打包时间：${buildTime}`, 'background:pink;color:black;padding: 4px 8px 4px 0;border-radius:4px;' )
 app.mount('#app')
