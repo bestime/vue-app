@@ -22,7 +22,7 @@
 - VITE_HOST_01_TARGET - 接口01代理：目标地址
 
 ## 注意事项
-  - 不建议将图片、json、字体、svg等静态资源放在 `src/assets` 中，请放在public中并创建一个目录比如`public/static`，减小部署倒服务器后url重名冲突的可能
+  - 不建议将图片、json、字体、svg等静态资源放在 `src/assets` 中，后期迭代不及时清理会导致项目越来越卡，请放在public中并创建一个目录比如`public/static`，减小部署倒服务器后url重名冲突的可能
   - 静态资源访问（不用像webpack那样麻烦，可直接 `/` 开头，指向 `public` 文件夹）
     - 标签中：`<img src="/static/images/leida02.png"/>`
     - css中：`background-image: url("/static/images/tobacco.png");`
