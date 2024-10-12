@@ -47,11 +47,12 @@
 
 <template>
   <div class="Manage">
-    <!-- <div v-if="filterList.length===0" class="no-menus">
+    <div v-if="filterList.length===0" class="no-menus">
       <span>暂无可访问的菜单</span>
       <span>请配置对应权限</span>
-    </div> -->
+    </div>
     <el-menu
+      v-else
       background-color="#545c64"
       class="left-menu"
       :default-active="defaultActiveId"
