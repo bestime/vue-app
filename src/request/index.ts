@@ -68,9 +68,9 @@ export function serverURL(prefix: keyof typeof prefixMap, path: string) {
  * @returns 
  */
 export async function requestLocalFile<T>(relativePath: string){
-  return request<T>({
-    baseURL: '@local',
-    url: relativePath
+  return axios<T>({
+    baseURL: '',
+    url: serverURL('@local', relativePath)
   })
 }
 
