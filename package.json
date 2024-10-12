@@ -9,8 +9,10 @@
     "build:history": "vue-tsc --build --force && vite build --mode production_history"
   },
   "dependencies": {
+    "@bestime/nine-ui-vue3": "^1.0.5",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
+    "element-plus": "^2.8.4",
     "lodash-es": "^4.17.21",
     "vue": "^3.5.11",
     "vue-router": "^4.4.5"

@@ -19,6 +19,7 @@ const prefixMap = {
   '@local': localHostPrefix.replace(/\/$/, '')
 };
 
+console.log("prefixMap", prefixMap)
 export interface RequestPagerResult<T> {
   code: number;
   message: string;
@@ -40,8 +41,8 @@ async function request<T>(options: IRquestBase & {
   url: string;
 }) {
   return instence<T>(merge(options, {
-    url: options.url,
-    baseURL: prefixMap[options.baseURL],
+    url: serverURL(options.baseURL, options.url),
+    baseURL: '',
   }))
 }
 
@@ -69,7 +70,7 @@ export function serverURL(prefix: keyof typeof prefixMap, path: string) {
 export async function requestLocalFile<T>(relativePath: string){
   return request<T>({
     baseURL: '@local',
-    url: serverURL('@local', relativePath)
+    url: relativePath
   })
 }
 

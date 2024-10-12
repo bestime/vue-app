@@ -17,7 +17,7 @@ export default defineConfig(function ({ mode }) {
   
   return {
     server: {
-      port: 7000,
+      port: 7322,
       strictPort: true,
       open: false,
       host: '0.0.0.0',
@@ -44,7 +44,8 @@ export default defineConfig(function ({ mode }) {
           manualChunks: getManualChunks([
             ['lodash-es'],
             ['dayjs', 'axios', 'vue-router'],
-            ['vue']
+            ['vue'],
+            ['element-plus']
           ])
         }
       }
