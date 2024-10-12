@@ -42,12 +42,17 @@ export default defineConfig(function ({ mode }) {
       rollupOptions: {
         output: {
           manualChunks: getManualChunks([
-            ['lodash-es'],
+            ['lodash-es', '@element-plus/icons-vue'],
             ['dayjs', 'axios', 'vue-router'],
             ['vue'],
             ['element-plus']
           ])
         }
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: { api: 'modern-compiler' },
       }
     },
     resolve: {
