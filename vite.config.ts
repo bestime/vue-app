@@ -34,7 +34,7 @@ export default defineConfig(function ({ mode }) {
       vue(),
       vitePluginHtmlTemplate({
         // 可自行配置其他变量
-        VITE_BUILD_TIME: new Date().getTime(),
+        VITE_BUILD_TIME: new Date().getTime()
       })
     ],
     build: {
