@@ -96,8 +96,8 @@ const filterList = computed(function () {
 
 const defaultActiveId = computed(function () {
   let routeId: string | undefined;
-  route.matched.toReversed().find(function (c) {
-    return jUtilsBase.deepFindItem(list.value, function (d) {
+  jUtilsBase.findLast(route.matched, function (c) {
+    return !!jUtilsBase.deepFindItem(list.value, function (d) {
       const isEq = c.name === d.routeName
       if(isEq) {
         routeId = d.id

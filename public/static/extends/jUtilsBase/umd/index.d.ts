@@ -321,7 +321,7 @@ declare function deepFindItem<T>(
 ): T | undefined;
 
 /**
- * 一维数组转树结构
+ * 一维数组转树结构。（会改变源数组，如有需要，请提前clone）
  * @param list - 待转数组
  * @param props - 生成数据的配置项
  * @param props.id - ID字段
@@ -681,6 +681,7 @@ declare function mapKvPair<T extends TKvPair, U>(
  * @return
  */
 declare function isFuzzyMatch(search: string, data: string, regFlags?: string): boolean;
+declare function fuzzyReplace(search: string, data: string, regFlags?: string): string;
 
 /**
  * 向字符串中添加零宽字符。（暂时用于排除同名表格单元格合并）
@@ -1068,6 +1069,17 @@ declare function treeFilter<T extends TKvPair>(
   handler: TreeFilterHandler<T>
 ): TreeItem<T>[];
 
+/**
+ * 倒序查找数组
+ * @param list
+ * @param handler
+ * @returns
+ */
+declare function findLast<T>(
+  list: T[],
+  handler: (value: T, index: number, obj: T[]) => boolean
+): T | undefined;
+
 declare global {
   /**
    * 该声明文件用于全局声明（不用npm安装时拷贝到项目中直接使用）
@@ -1096,11 +1108,13 @@ declare global {
       difference,
       fieldCheck,
       filterWithMove,
+      findLast,
       floorFixed,
       forEach,
       forEachKvPair,
       forEachTree,
       formatTime,
+      fuzzyReplace,
       getLikeNumberRegExp,
       getPiecesWithIndex,
       getRandom,
