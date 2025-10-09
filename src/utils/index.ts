@@ -34,6 +34,8 @@ export function setLanguage (name: string) {
  * 获取上次使用的语言
  * @returns 
  */
-export function getLanguage() {  
-  return (jUtilsBrowser.getStorage(LANGUAGE_KEY) || 'zh') as TLocals
+export function getLanguage() {
+  const locale = (jUtilsBrowser.getStorage(LANGUAGE_KEY) || 'zh') as TLocals
+  document.querySelector('html')?.setAttribute('lang', locale);  
+  return locale
 }

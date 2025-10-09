@@ -46,7 +46,7 @@ const state = reactive({
 })
 
 onMounted(function () {
-  console.log("登陆有")
+  
 })
 
 

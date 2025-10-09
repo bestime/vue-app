@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "vite --mode development",
-    "dev:jcy": "vite --mode development-jcy",
-    "build": "run-p type-check \"build-only {@}\" --mode production"
+    "build:test": "vue-tsc --build --force && vite build --mode production-test",
+    "build": "vue-tsc --build --force && vite build --mode production",
+    "dev:jcy": "vite --mode development-jcy"
   },
   "dependencies": {
     "ant-design-vue": "^4.2.6",
