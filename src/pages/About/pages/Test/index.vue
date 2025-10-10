@@ -9,14 +9,28 @@
 
 <template>
   <div class="Test">
-    <a-table :dataSource="state.testData" :columns="tableColumns" />
+    <a-table :dataSource="state.testData" :columns="state.tableColumns" />
   </div>  
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeUnmount, onMounted } from 'vue'
+import { reactive, onBeforeUnmount, onMounted, watch } from 'vue'
 import { apiThreemeetingArchiveGetThreeMeetingArchiveList } from '@/services'
+import { useI18n } from 'vue-i18n'
 
+const { t, locale } = useI18n({
+  useScope: 'global',
+  messages: {  
+    "zh": {
+      'title': '标题',
+      'content': '内容',
+    },
+    "en": {
+      'title': 'Title',
+      'content': 'Content',
+    },
+  }
+})
 defineOptions({
   name: 'ROUTE_TEST'
 })
@@ -24,21 +38,26 @@ defineOptions({
 
 
 const state = reactive({
+  tableColumns: [] as any[],
   testData: [] as any[]
 })
 
-const tableColumns = [
-  {
-    title: '标题',
-    dataIndex: 'meetingName',
-    key: 'meetingName',
-  },
-  {
-    title: '内容',
-    dataIndex: 'mettingTopic',
-    key: 'mettingTopic',
-  },
-]
+function getColumns () {
+  return [
+    {
+      title: t('title'),
+      dataIndex: 'meetingName',
+      key: 'meetingName',
+    },
+    {
+      title: t('content'),
+      dataIndex: 'mettingTopic',
+      key: 'mettingTopic',
+    },
+  ]
+}
+
+
 
 apiThreemeetingArchiveGetThreeMeetingArchiveList({
   data: {
@@ -50,8 +69,14 @@ apiThreemeetingArchiveGetThreeMeetingArchiveList({
 })
 
 
+watch(() => locale.value, function () {
+  state.tableColumns = getColumns()
+}, {
+  immediate: true
+})
 
 onMounted(function () {
   console.log("测试页加载了")
 })
 </script>
+

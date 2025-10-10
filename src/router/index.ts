@@ -1,6 +1,6 @@
 
-import { SHARE_PERMISSIONID } from '@/utils/constant'
-import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
+import { PERMISSIONID_SHARE } from '@/utils/constant'
+import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 const routerMode = import.meta.env.VITE_ROUTER_MODE
 const baseUrl = import.meta.env.BASE_URL
@@ -28,7 +28,7 @@ export const routeList: Array<RouteRecordRaw> = [
         component: () => import("@/pages/Home/index.vue"),
         meta: {
           cache: true,
-          permissionId: SHARE_PERMISSIONID
+          permissionId: PERMISSIONID_SHARE
         }
       },
       {
@@ -54,7 +54,7 @@ export const routeList: Array<RouteRecordRaw> = [
         name: 'ROUTE_NORMALSCREEN_PAGE404',
         component: () => import("@/pages/Page404/index.vue"),
         meta: {
-          permissionId: SHARE_PERMISSIONID
+          permissionId: PERMISSIONID_SHARE
         },
       },
       
@@ -67,14 +67,15 @@ export const routeList: Array<RouteRecordRaw> = [
     meta: {
       cache: false,
       deprecated: false,
-      permissionId: SHARE_PERMISSIONID
+      permissionId: PERMISSIONID_SHARE
     }
 
   },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  strict: true,
+  history: routerMode === 'history' ? createWebHistory(baseUrl) : createWebHashHistory(),
   routes: routeList,
 })
 

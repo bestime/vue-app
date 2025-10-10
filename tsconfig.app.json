@@ -12,8 +12,7 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": [
-      "ant-design-vue/typings/global.d.ts",
-      "@intlify/unplugin-vue-i18n/messages"
+      "ant-design-vue/typings/global.d.ts"
     ],
     "paths": {
       "@/*": ["./src/*"]

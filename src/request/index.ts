@@ -89,8 +89,6 @@ export default async function request<T>(options: TRequestFullOptions): Promise<
     
     const code = response.data?.data?.resultCode ?? response.data?.resultCode ?? response?.data?.code
     const isHost01Error = response?.data?.data?.success === false || response?.data?.success === false || errorCode.includes(code)
-
-
     
     
     if(isHost01Error) {
@@ -101,18 +99,27 @@ export default async function request<T>(options: TRequestFullOptions): Promise<
 
     return response
   }).catch(async function (resp: AxiosError) {
+    if(resp?.response?.data) {
+      const isBolb = jUtilsBase.getType(resp?.response?.data) === 'Blob'
+      if(isBolb) {
+        // @ts-ignore
+        const yyy = await resp?.response?.data?.text?.()
+        resp.response.data = jUtilsBase._KvPair(yyy)
+      }
+    }
+
     const data: undefined|Record<string, any> = resp.response?.data as any
     // console.log("错误", data, resp)
     const error:IErrorMessage = {
       code: data?.code ?? resp.code,
-      message:data?.message || resp.message || t('error.message-null'),
+      message:data?.message || resp.message || t('global.errorMessageNull'),
       url: resp.config?.url ?? ''
     }
     if(error.code === 'UN_AUTHENTICATED') {
       const login = routeList.find((c: any)=>c.name === 'ROUTE_LOGIN_ROOT')!
       const uPd = router.resolve(login)
       window.location.href =uPd.href
-    } else if(!options.disableErrorAlert) {
+    } else if(!options.disableErrorAlert && !options.excludeErrorCodes?.includes(error.code) && !httpWhiteCode.includes(error.code)) {
       message.error(error.message)
     }
     return Promise.reject(error);

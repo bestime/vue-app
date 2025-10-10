@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.MenuTabs {
+.LayoutTabs {
   box-sizing: border-box;
   background-color: white;
   padding: 15px 0 0 0;
@@ -23,7 +23,7 @@
 </style>
 
 <template>
-  <a-tabs class="MenuTabs" :activeKey="activeKey" hide-add type="editable-card" @edit="removeTag" @change="onTabClick">
+  <a-tabs class="LayoutTabs" :activeKey="activeKey" hide-add type="editable-card" @edit="removeTag" @change="onTabClick">
     <template #leftExtra>
       <span style="padding: 0 0 0 20px;"></span>
     </template>
@@ -68,7 +68,23 @@ import {
 import { useI18n } from 'vue-i18n';
 const router = useRouter()
 const route = useRoute()
-const {t,locale} = useI18n()
+const {t,locale} = useI18n({
+  useScope: 'global',
+  messages: {  
+    "zh": {
+      "tabs": {
+        "close-other": '关闭其他',
+        'refresh-current-page': '刷新当前页'
+      }
+    },
+    "en": {
+      "tabs": {
+        "close-other": 'Close other',
+        'refresh-current-page': 'Refresh current'
+      }
+    },
+  }
+})
 export interface ITabItem {
   routeName: string,
   uid: string,
@@ -124,21 +140,3 @@ function clickTabMore (ev: any) {
   }
 }
 </script>
-
-
-<i18n>
-{  
-  "zh": {
-    "tabs": {
-      "close-other": '关闭其他',
-      'refresh-current-page': '刷新当前页'
-    }
-  },
-  "en": {
-    "tabs": {
-      "close-other": 'Close other',
-      'refresh-current-page': 'Refresh current'
-    }
-  },
-}
-</i18n>

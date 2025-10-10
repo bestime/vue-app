@@ -1,7 +1,7 @@
 import { apiLoginLoginResultData } from "@/services";
 import type { Router, RouteRecordRaw } from 'vue-router';
-import { IS_DEV, SHARE_PERMISSIONID } from "@/utils/constant";
-import { devPagePermissId } from "@/utils/constant";
+import { IS_DEV, PERMISSIONID_SHARE } from "@/utils/constant";
+import { PERMISSID_DEV } from "@/utils/constant";
 import { last } from "lodash-es";
 import router, { routeList } from "@/router";
 
@@ -101,7 +101,7 @@ export async function reloadRoutes () {
   }
 
   if(import.meta.env.VITE_APP_RUNMODE === '测试版') {
-    permissionIds.push(devPagePermissId)
+    permissionIds.push(PERMISSID_DEV)
   } 
   const pNames = getRouteNames()
   // console.log("当前用户的权限", permissionIds)
@@ -116,7 +116,7 @@ export function getRouteNames () {
 }
 
 function parseJavaPermissionToRouteName (data: string[], routeList:RouteRecordRaw[]) {
-  const ids = [SHARE_PERMISSIONID].concat(data)
+  const ids = [PERMISSIONID_SHARE].concat(data)
   const result: Array<string> = []
   jUtilsBase.forEachTree(routeList, function (item) {
     const psid = getMetaPpermissionId(item)

@@ -24,7 +24,7 @@
 
 <template>
   <div class="Login">
-    <h1>{{ $t('global.systemName') }}</h1>
+    <h1>{{ t('global.systemName') }}</h1>
     <a-tabs v-model:activeKey="state.activeWayId" style="width: 400px;">
       <a-tab-pane key="a" :tab="t('loginWayAccount')">
         <WithAccount/>
@@ -38,7 +38,17 @@
 import { useI18n } from 'vue-i18n'
 import { reactive, onBeforeUnmount, onMounted } from 'vue'
 import WithAccount from './components/WithAccount/index.vue'
-const {t} = useI18n()
+const {t} = useI18n({
+  useScope: 'global',
+  messages: {  
+    "zh": {
+      'loginWayAccount': '账号密码登录'
+    },
+    "en": {
+      'loginWayAccount': 'Sign In with Account'
+    },
+  }
+})
 
 
 const state = reactive({
@@ -52,14 +62,3 @@ onMounted(function () {
 
 </script>
 
-
-<i18n>
-{  
-  "zh": {
-    'loginWayAccount': '账号密码登录'
-  },
-  "en": {
-    'loginWayAccount': 'Sign In with Account'
-  },
-}
-</i18n>

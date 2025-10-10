@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-.LeftMenu {
+.LayoutMenu {
   box-sizing: border-box;
   width: 220px;
   flex-shrink: 0;
@@ -64,10 +64,10 @@
 </style>
 
 <template>
-  <div class="LeftMenu " :is-fold="props.collapsed">
+  <div class="LayoutMenu " :is-fold="props.collapsed">
     <div class="logo-box">
       <img src="/static/images/logo.png"/>
-      <span class="g-keep-all">{{ $t('global.systemName') }}</span>
+      <span class="g-keep-all">{{ t('global.systemName') }}</span>
     </div>
     <a-menu
       :openKeys="props.collapsed ? undefined : openKeys"
@@ -96,10 +96,30 @@ import {
   TransactionOutlined,
 } from '@ant-design/icons-vue';
 import { useRoute, useRouter } from 'vue-router';
-import type { ITabItem } from '../MenuTabs/index.vue';
+import type { ITabItem } from '../LayoutTabs/index.vue';
 import { clone, cloneDeep } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
-const {t, locale} = useI18n()
+const {t, locale} = useI18n({
+  useScope: 'global',
+  messages: {  
+    "zh": {
+      "menu": {
+        "home": '首页',
+        'group_01': '分组一',
+        'aboutUs': '关于我们',
+        'test': '测试',
+      }
+    },
+    "en": {
+      "menu": {
+        "home": 'Home',
+        'group_01': 'Group One',
+        'aboutUs': 'About Us',
+        'test': 'Test',
+      }
+    },
+  }
+})
 
 const router = useRouter()
 const route = useRoute()
@@ -263,24 +283,3 @@ watch(() => locale.value, updateLanguage, {
 
 
 </script>
-
-<i18n>
-{  
-  "zh": {
-    "menu": {
-      "home": '首页',
-      'group_01': '分组一',
-      'aboutUs': '关于我们',
-      'test': '测试',
-    }
-  },
-  "en": {
-    "menu": {
-      "home": 'Home',
-      'group_01': 'Group One',
-      'aboutUs': 'About Us',
-      'test': 'Test',
-    }
-  },
-}
-</i18n>

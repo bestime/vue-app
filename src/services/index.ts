@@ -95,8 +95,6 @@ export async function apiLoginLoginResultData() {
       }
 
       if (!isSuccess) return resp
-      const udm = resp.data.data
-      let permissionIds = udm.permissions.map((c: any) => c.key)
       return resp
     },
   })

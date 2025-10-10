@@ -25,12 +25,12 @@
 
 <template>
   <div class="Manage">
-    <LeftMenu ref="menu-ref" :collapsed="state.isOpen" @on-tab-change="onTabChange" :clearId="state.clearId"/>
+    <LayoutMenu ref="menu-ref" :collapsed="state.isOpen" @on-tab-change="onTabChange" :clearId="state.clearId"/>
     <div class="page-container">
       <LayoutHeader v-model:collapsed="state.isOpen"/>
       <!-- <h1>{{state.routeKey}}</h1>
       <h2>{{state.aliveNames}}</h2> -->
-      <MenuTabs :tags="state.tabList" @on-refresh="onRefreshTab" @on-remove="toRemove"/>
+      <LayoutTabs :tags="state.tabList" @on-refresh="onRefreshTab" @on-remove="toRemove"/>
       <RouterView #default="{Component, route}">
         <KeepAlive ref="ref-alive" :include="state.aliveNames">
           <component :is="Component" :key="state.routeKey"/>
@@ -42,8 +42,8 @@
 
 <script lang="ts" setup>
 import {  cloneVNode, computed, nextTick, onBeforeUnmount, reactive, useTemplateRef, watch } from 'vue'
-import LeftMenu, { type IMenuItem } from './components/LeftMenu/index.vue'
-import MenuTabs, { type ITabItem } from './components/MenuTabs/index.vue'
+import LayoutMenu, { type IMenuItem } from './components/LayoutMenu/index.vue'
+import LayoutTabs, { type ITabItem } from './components/LayoutTabs/index.vue'
 import LayoutHeader from './components/LayoutHeader/index.vue'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
 import { cloneDeep } from 'lodash-es'

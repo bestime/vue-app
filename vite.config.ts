@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-import VueI18nPlugin from  "@intlify/unplugin-vue-i18n/vite"
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -75,12 +74,6 @@ export default defineConfig(function ({ mode }) {
         VITE_BUILD_TIME: new Date().getTime()
       }),
       vue(),
-      VueI18nPlugin({
-        include: [
-          resolveNodePath("./src/i18n/locales/**"),
-          resolveNodePath("./src/components/locales/**"),
-        ]
-      }),
       vueJsx()
     ],
     css: {

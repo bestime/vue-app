@@ -1,12 +1,9 @@
-html, body {
-  margin: 0;
-  padding: 0;
-}
+
 
 .ant-dropdown-menu-title-content {
-  white-space: nowrap; /* 禁止文本换行 */
-  overflow: hidden;    /* 隐藏超出容器的内容（可选） */
-  text-overflow: ellipsis; /* 超出部分显示省略号（可选） */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .g-menu-01 {
