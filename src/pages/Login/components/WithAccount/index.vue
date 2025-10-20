@@ -34,6 +34,7 @@ import { apiLoginAccessibleOrganizations, apiLoginDoLogin } from '@/services';
 import { useI18n } from 'vue-i18n'
 import { useForm } from 'ant-design-vue/es/form';
 import { sleep } from '@/utils/tools';
+import { reloadRoutes } from '@/permission';
 
 const formState = reactive({
   username: '',
@@ -111,6 +112,7 @@ async function commitLogin () {
       return resp.data.data
     })
     
+    await reloadRoutes()
     router.replace({
       name: 'ROUTE_HOME'
     })

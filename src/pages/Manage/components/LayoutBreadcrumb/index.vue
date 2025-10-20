@@ -39,7 +39,7 @@
 </style>
 
 <template>
-  <ul class="LayoutBreadcrumb">
+  <ul class="LayoutBreadcrumb" v-if="breadList.length>1">
     <li v-for="(item, index) in breadList" @click="toJump(item)" :class="{'is-route': item.isRoute}">
       <span>{{item.label}}</span>
       <b v-if="index<breadList.length-1">/</b>

@@ -1,0 +1,319 @@
+{
+  "data": [
+    {
+      "permissiionId": "PER_58",
+      "label": "右上角-跳转大屏",
+      "status": "0"
+    },
+    {
+      "permissiionId": "PER_59",
+      "label": "财务报表",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_60",
+          "label": "数据导入",
+          "status": "0",
+          "children": [
+            {
+              "permissiionId": "PER_1",
+              "label": "[累计] 科目余额表-重庆销售",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_2",
+              "label": "[当月] 科目余额表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_3",
+              "label": "[当月] 人工成本统计表-重庆销售",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_4",
+              "label": "[当月] 资产负债表-重庆销售",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_5",
+              "label": "[当月] 利润表-重庆销售",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_6",
+              "label": "[累计] 现金流量表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_7",
+              "label": "[当月] 应付款项表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_9",
+              "label": "[当月] 应收款项账龄表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_10",
+              "label": "导入全部",
+              "status": "0"
+            }
+          ]
+        },
+        {
+          "permissiionId": "PER_61",
+          "label": "数据导出",
+          "status": "0",
+          "children": [
+            {
+              "permissiionId": "PER_12",
+              "label": "BB01-资产负债表'",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_13",
+              "label": "BB02-利润及利润分配表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_14",
+              "label": "BB03-现金流量表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_15",
+              "label": "BB09-应收款项分类汇总表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_16",
+              "label": "BB29-应付款项分类汇总表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_17",
+              "label": "BB16-固定（油气）资产明细表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_18",
+              "label": "BB44-税金及附加明细表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_19",
+              "label": "BB45-销售费用表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_20",
+              "label": "BB46-管理费用表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_21",
+              "label": "BB47-财务费用表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_22",
+              "label": "BB63-人工成本统计表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_23",
+              "label": "BY16-生产经营费用明细表",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_24",
+              "label": "导出全部",
+              "status": "0"
+            }
+          ]
+        },
+        {
+          "permissiionId": "PER_62",
+          "label": "系统配置",
+          "status": "0",
+          "children": [
+            {
+              "permissiionId": "PER_25",
+              "label": "导入模板",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_26",
+              "label": "导出模板",
+              "status": "0"
+            },
+            {
+              "permissiionId": "PER_27",
+              "label": "BB45-销售费用表",
+              "status": "0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_63",
+      "label": "管道气销售报表",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_30",
+          "label": "管道气销售报表-重庆销售数据大表",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_31",
+          "label": "管道气销售报表-重庆销售数据上游大表",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_32",
+          "label": "管道气销售报表-资料上传",
+          "status": "0"
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_64",
+      "label": "LNG基础信息",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_34",
+          "label": "LNG基础信息-公司信息管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_35",
+          "label": "LNG基础信息-液厂管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_36",
+          "label": "LNG基础信息-客户管理",
+          "status": "0"
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_65",
+      "label": "LNG台账",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_38",
+          "label": "台账管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_39",
+          "label": "装车计划管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_40",
+          "label": "液厂库存管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_41",
+          "label": "线上竞拍管理",
+          "status": "0"
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_66",
+      "label": "LNG结算",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_43",
+          "label": "客户结算单管理",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_44",
+          "label": "液厂计量交接单",
+          "status": "0"
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_67",
+      "label": "LNG统计报表",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_46",
+          "label": "LNG台账报表",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_47",
+          "label": "LNG液厂报表",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_48",
+          "label": "ERP价格维护报表",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_49",
+          "label": "LNG每期竞拍量完成情况",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_50",
+          "label": "LNG装车量表",
+          "status": "0"
+        }
+      ]
+    },
+    {
+      "permissiionId": "PER_68",
+      "label": "评级",
+      "status": "0",
+      "children": [
+        {
+          "permissiionId": "PER_52",
+          "label": "用气量",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_53",
+          "label": "用气价格",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_54",
+          "label": "利润",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_55",
+          "label": "计划",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_56",
+          "label": "其他数据源",
+          "status": "0"
+        },
+        {
+          "permissiionId": "PER_57",
+          "label": "方案列表",
+          "status": "0"
+        }
+      ]
+    }
+  ]
+}

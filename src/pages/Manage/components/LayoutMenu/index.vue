@@ -207,20 +207,20 @@ function setCurrentMenu (item: IMenuItem, reload: boolean) {
     }
   })
   router.push(to)
-  if(!state.openTags.some(c=>c.uid === to.fullPath)) {
+  if(!state.openTags.some(c=>c.routeName === to.name)) {
     state.openTags.push({
       routeName: item.key,
-      uid: to.fullPath,
       label: item.label,
-      removeable: item.removeable !== false
+      removeable: item.removeable !== false,
+      highlights: item?.highlights
     })
   }
-  const nk = reload ? to.fullPath : undefined
+  const nk = reload ? to.name as string : undefined
   emits('on-tab-change', cloneDeep(state.openTags), nk)
 }
 
 function removeTag (key: string) {  
-  const index = state.openTags.findIndex(c=>c.uid === key)
+  const index = state.openTags.findIndex(c=>c.routeName === key)
   let toIdx = index
   if(toIdx > 0) {
     toIdx--
@@ -228,14 +228,14 @@ function removeTag (key: string) {
     toIdx++
   }
 
-  const toKey = state.openTags[toIdx]?.uid
+  const toKey = state.openTags[toIdx]?.routeName
   state.openTags.splice(index, 1)
   emits('on-tab-change', cloneDeep(state.openTags), undefined)
   
   if(state.openTags.length === 0) {
     setCurrentMenu(state.menuList[0]!,  true)
-  } else if(route.fullPath === key && toKey) {
-    const routeName = state.openTags.find(c=>c.uid === toKey)?.routeName
+  } else if(route.name === key && toKey) {
+    const routeName = state.openTags.find(c=>c.routeName === toKey)?.routeName
     const to = jUtilsBase.deepFindItem(state.menuList, function (c) {
       return c.key === routeName
     })!
@@ -260,7 +260,6 @@ function init () {
   const currentItem = jUtilsBase.deepFindItem(state.menuList,function (item) {
     return item.key === currentRouteName || item.highlights?.some(c=>c.key === currentRouteName) || false
   })
-  console.log("currentItem", currentItem)
   if(currentItem) {
     setCurrentMenu(currentItem, false)
   }

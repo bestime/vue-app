@@ -16,6 +16,25 @@ export const routeList: Array<RouteRecordRaw> = [
     component: () => import('@/pages/Ready/index.vue'),
   },
   {
+    path: '/permission-preview',
+    name: 'ROUTE_PERMISSIONPERVIEW',
+    component: () => import('@/pages/PermissonsPerview/index.vue'),
+    meta: {
+      cache: false,
+      permissionId: PERMISSIONID_SHARE
+    }
+  },
+  {
+    path: '/login',
+    name: 'ROUTE_LOGIN_ROOT',
+    component: () => import("@/pages/Login/index.vue"),
+    meta: {
+      cache: false,
+      deprecated: false,
+      permissionId: PERMISSIONID_SHARE
+    }
+  },
+  {
     path: '/manage',
     name: 'ROUTE_APP_MANAGE',
     component: () => import("@/pages/Manage/index.vue"),
@@ -70,17 +89,7 @@ export const routeList: Array<RouteRecordRaw> = [
       
     ]
   },
-  {
-    path: '/login',
-    name: 'ROUTE_LOGIN_ROOT',
-    component: () => import("@/pages/Login/index.vue"),
-    meta: {
-      cache: false,
-      deprecated: false,
-      permissionId: PERMISSIONID_SHARE
-    }
-
-  },
+  
 ]
 
 function checkRepeatRoutes () {

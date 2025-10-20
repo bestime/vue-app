@@ -29,12 +29,12 @@
     </template>
     <a-tab-pane
       v-for="pane in props.tags"
-      :key="pane.uid"
+      :key="pane.routeName"
       :closable="pane.removeable && props.tags.length>1"
     >
       <template #tab>
         <span>{{ pane.label }}</span>
-        <ReloadOutlined class="tab-reload-icon" v-if="route.fullPath === pane.uid" @click="toRefresh(pane.uid)"/>
+        <ReloadOutlined class="tab-reload-icon" v-if="activeKey === pane.routeName" @click="toRefresh(route.name as string)"/>
       </template>
     </a-tab-pane>
     <template #rightExtra>
@@ -66,6 +66,7 @@ import {
   AppstoreOutlined,
 } from '@ant-design/icons-vue';
 import { useI18n } from 'vue-i18n';
+import type { IMenuItem } from '../LayoutMenu/index.vue';
 const router = useRouter()
 const route = useRoute()
 const {t,locale} = useI18n({
@@ -87,13 +88,19 @@ const {t,locale} = useI18n({
 })
 export interface ITabItem {
   routeName: string,
-  uid: string,
   label: string,
   removeable: boolean
+  highlights?: IMenuItem[]
 }
 
+
+
 const activeKey = computed(function () {
-  return route.fullPath
+  
+  const cName = props.tags.find(function (t) {
+    return route.name === t.routeName || t?.highlights?.some(c=>c.key === route.name) || false
+  })?.routeName
+  return cName ?? ''
 })
 
 const props = defineProps<{
@@ -111,9 +118,10 @@ function toRefresh (key: string) {
   emits('on-refresh', key)
 }
 
-function onTabClick (path: any) {
-  const to = router.resolve(path)
-  router.push(to)
+function onTabClick (name:any) {
+  router.push({
+    name
+  })
 }
 
 function removeTag (uid: any) {
@@ -122,8 +130,8 @@ function removeTag (uid: any) {
 
 function toCloseOther () {
   props.tags.forEach(function (item) {
-    if(item.removeable && item.uid !== activeKey.value) {
-      removeTag(item.uid)
+    if(item.removeable && item.routeName !== activeKey.value) {
+      removeTag(item.routeName)
     }
   })
 }

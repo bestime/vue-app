@@ -142,7 +142,7 @@ export async function reloadRoutes (disabled?: boolean) {
 }
 
 
-const excludeNames = ['ROUTE_APP_ROOT', 'ROUTE_LOGIN_ROOT', 'ROUTE_APP_MANAGE']
+const excludeNames = ['ROUTE_APP_ROOT', 'ROUTE_LOGIN_ROOT', 'ROUTE_APP_MANAGE', 'ROUTE_PERMISSIONPERVIEW']
 export function getFirstRouteName () {
   const names = getRouteNames()  
   const res = names.find(c=>!excludeNames.includes(c))

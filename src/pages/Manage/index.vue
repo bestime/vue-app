@@ -73,8 +73,9 @@ function onMenuChange (v: IMenuItem[]) {
 }
 
 function onTabChange (data: ITabItem[], newKey?: string) {
-  const newOpen = !jUtilsBase.isNull(newKey) && !!state.aliveKeys[newKey] && !state.tabList.some(c=>c.uid === newKey)
+  const newOpen = !jUtilsBase.isNull(newKey) && !!state.aliveKeys[newKey] && !state.tabList.some(c=>c.routeName === newKey)
   // console.log("是否重载", newOpen,newKey)
+  // console.log("tab列表", data)
   state.tabList = data
   if(newOpen) {
     nextTick(function () {
@@ -85,11 +86,11 @@ function onTabChange (data: ITabItem[], newKey?: string) {
 
 function updateRouteKey () {
   const currentComponentName = route.name as string
-  const currentRouteName = route.fullPath
-  if(jUtilsBase.isNull(state.aliveKeys[currentRouteName])) {
-    state.aliveKeys[currentRouteName] = {
+  
+  if(jUtilsBase.isNull(state.aliveKeys[currentComponentName])) {
+    state.aliveKeys[currentComponentName] = {
       count: 0,
-      id:`${currentRouteName}@0` 
+      id:`${currentComponentName}@0` 
     }
   }
   const needCache = route.meta.cache === true
@@ -98,7 +99,7 @@ function updateRouteKey () {
   } else if(!state.aliveNames.includes(currentComponentName)) {
     state.aliveNames.push(currentComponentName)
   }
-  state.routeKey = state.aliveKeys[currentRouteName].id
+  state.routeKey = state.aliveKeys[currentComponentName].id
 }
 
 watch(() => route.name, updateRouteKey, {

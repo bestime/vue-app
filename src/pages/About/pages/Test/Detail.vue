@@ -11,6 +11,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeUnmount } from 'vue'
+import { reactive, onBeforeUnmount, onMounted } from 'vue'
 
+onMounted(function () {
+  console.log("加载-我是测试详情")
+})
 </script>

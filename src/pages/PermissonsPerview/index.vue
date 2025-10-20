@@ -31,7 +31,7 @@
 <script lang="ts" setup>
 import { requestLocalFile } from '@/request';
 import { reactive, onBeforeUnmount } from 'vue'
-import type { TableColumn } from 'ant-design-vue'
+import type { TableColumn, TableColumnType } from 'ant-design-vue'
 
 const state = reactive({
   columns: [
@@ -55,7 +55,7 @@ const state = reactive({
       align: 'center'
     },
     
-  ] as IMyAntdTableColumnItem[],
+  ] as TableColumnType[],
   tableData: [] as any[]
 })
 
