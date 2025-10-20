@@ -1,4 +1,4 @@
-import { removeToken } from "@/utils"
+import { removeToken } from "@/utils/tools"
 import request, { type IRquestBase } from "../request"
 
 interface IJavaResponse<T = unknown> {

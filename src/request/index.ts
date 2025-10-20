@@ -3,12 +3,9 @@ import { message } from 'ant-design-vue';
 import router, { routeList } from '../router'
 import axios, { type AxiosResponse } from 'axios';
 import { type AxiosRequestConfig, AxiosError } from 'axios';
-import { merge } from 'lodash-es'
-import type { Router, RouteRecordRaw } from 'vue-router';
 import i18n, { type TLocals } from '@/i18n';
 
 const { t } = i18n.global;
-
 
 interface IErrorMessage {
   code: string,
@@ -18,7 +15,7 @@ interface IErrorMessage {
 
 
 const httpWhiteCode = ['ERR_CANCELED', 'ECONNABORTED']
-
+const errorCode: Array<string| number> = [500, 'ILLEGAL_ACCESS']
 const routerMode = import.meta.env.VITE_ROUTER_MODE
 const localHostPrefix = routerMode ==='hash' ? './' : import.meta.env.VITE_ROUTER_BASE
 
@@ -55,11 +52,6 @@ export interface RequestPagerResult<T> {
   };
 }
 
-const errorCode: Array<string| number> = [500, 'ILLEGAL_ACCESS']
-
-
-
-
 /**
  * 请求接口的的入口函数。
  * 注：不建议在里面处理loading和弹窗等和业务相关的操作！可以吧不同的事件通过订阅模式通知出去
@@ -84,12 +76,10 @@ export default async function request<T>(options: TRequestFullOptions): Promise<
   }).then(function (response: any) {
     if(options.responseParse) {
       response = options.responseParse(response)
-    }
-    
+    }    
     
     const code = response.data?.data?.resultCode ?? response.data?.resultCode ?? response?.data?.code
-    const isHost01Error = response?.data?.data?.success === false || response?.data?.success === false || errorCode.includes(code)
-    
+    const isHost01Error = response?.data?.data?.success === false || response?.data?.success === false || errorCode.includes(code)    
     
     if(isHost01Error) {
       const message = response.data?.message ?? response.data?.description ?? '服务器未知错误'
@@ -107,9 +97,7 @@ export default async function request<T>(options: TRequestFullOptions): Promise<
         resp.response.data = jUtilsBase._KvPair(yyy)
       }
     }
-
     const data: undefined|Record<string, any> = resp.response?.data as any
-    // console.log("错误", data, resp)
     const error:IErrorMessage = {
       code: data?.code ?? resp.code,
       message:data?.message || resp.message || t('global.errorMessageNull'),
@@ -140,7 +128,6 @@ export function serverURL(prefix: keyof typeof prefixMap, path: string) {
   return pv + path;
 }
 
-
 /**
  * 请求前端本地文件数据
  * @param relativePath
@@ -153,4 +140,3 @@ export async function requestLocalFile<T>(relativePath: string, query?: Record<s
     params: query
   })
 }
-

@@ -29,8 +29,7 @@
       <a-tab-pane key="a" :tab="t('loginWayAccount')">
         <WithAccount/>
       </a-tab-pane>
-    </a-tabs>
-    
+    </a-tabs>    
   </div>  
 </template>
 
@@ -50,7 +49,6 @@ const {t} = useI18n({
   }
 })
 
-
 const state = reactive({
   activeWayId: 'a'
 })
@@ -58,7 +56,4 @@ const state = reactive({
 onMounted(function () {
   
 })
-
-
 </script>
-

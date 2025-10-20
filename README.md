@@ -1,6 +1,6 @@
 # vue3-antd-admin 后台管理系统通用模板
 
-此项目是一个运营中心的`后台管理系统通用模板`，技术栈为 技术栈：vue3、TS、ant-design、axios、dayjs、lodash-es、vue-router，集成了以下基础功能
+此项目是一个运营中心的`后台管理系统通用模板`，技术栈为 vue3、TS、ant-design、axios、dayjs、lodash-es、vue-router，集成了以下基础功能
 - i18n多语言
 - 登录、退出功能
 - 权限功能、菜单的过滤
@@ -13,7 +13,7 @@
   2. 需要自行实现代理：`http://127.0.0.1:5003/PROXY_DASHBOARD` 至 `https://dashboard.chinaenergydata.com/`。至于为什么不在项目本身的vite.config.ts中配置，是因为https代理比较麻烦，所以本地另外起了一个nginx。你也可采用其他方式。
 
 ### 2、npm run dev
-  这个一般是给后端开发人员使用，已经配置齐全，只需要后端启动项目并修改 `env/.env` 中 `VITE_HOST_01_TARGET = "http://localhost:8885"` 为你对应的端口就行。
+  这个一般是给后端开发人员使用，已经配置齐全，只需要后端启动接口并修改 `env/.env` 中 `VITE_HOST_01_TARGET = "http://localhost:8885"` 为你对应的端口就行。
 
 ### 3、npm run build:test 打包测试环境
 ### 4、npm run build 打包正式环境

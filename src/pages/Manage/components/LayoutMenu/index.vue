@@ -127,6 +127,7 @@ const route = useRoute()
 
 const emits = defineEmits<{
   (name: 'on-tab-change', data: ITabItem[], newKey?: string): void
+  (name: 'on-menu-update', data: IMenuItem[]): void
 }>()
 
 const props = defineProps<{
@@ -159,6 +160,12 @@ function getMenuList ():IMenuItem[] {
           key: 'ROUTE_TEST',
           icon: () => h(AppstoreOutlined),
           label: t('menu.test'),
+          highlights: [
+            {
+              key: 'ROUTE_TEST_DETAIL',
+              label: '详情',
+            }
+          ]
         },
       ]
     },
@@ -179,9 +186,10 @@ const state = reactive({
 export interface IMenuItem {
   key: string,
   label: string
-  icon: () => VNode
+  icon?: () => VNode
   removeable?: boolean
-  children?: IMenuItem[]
+  children?: IMenuItem[],
+  highlights?: IMenuItem[]
 }
 
 function onItemClick (ev:any) {
@@ -192,7 +200,6 @@ function onItemClick (ev:any) {
 
 
 function setCurrentMenu (item: IMenuItem, reload: boolean) {
-  
   const to = router.resolve({
     name: item.key,
     query: {
@@ -238,8 +245,9 @@ function removeTag (key: string) {
 
 
 const openKeys = computed(function () {
+  const currentRouteName = route.name as string
   const path: IMenuItem[] = jUtilsBase.deepFindTreePath(state.menuList, function (leaf: IMenuItem) {
-    return route.name === leaf.key
+    return leaf.key === currentRouteName || leaf.highlights?.some(c=>c.key===currentRouteName) || false
   }, {
     id: 'key',
     children: 'children',
@@ -248,9 +256,11 @@ const openKeys = computed(function () {
 })
 
 function init () {
+  const currentRouteName = route.name as string
   const currentItem = jUtilsBase.deepFindItem(state.menuList,function (item) {
-    return item.key === route.name
+    return item.key === currentRouteName || item.highlights?.some(c=>c.key === currentRouteName) || false
   })
+  console.log("currentItem", currentItem)
   if(currentItem) {
     setCurrentMenu(currentItem, false)
   }
@@ -275,6 +285,7 @@ function updateLanguage () {
     tag.label = iMenu.label
   })
   emits('on-tab-change', cloneDeep(state.openTags), '')
+  emits('on-menu-update', state.menuList)
 }
 
 watch(() => locale.value, updateLanguage, {

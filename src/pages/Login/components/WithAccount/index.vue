@@ -33,7 +33,7 @@ import router from '@/router';
 import { apiLoginAccessibleOrganizations, apiLoginDoLogin } from '@/services';
 import { useI18n } from 'vue-i18n'
 import { useForm } from 'ant-design-vue/es/form';
-import { sleep } from '@/utils';
+import { sleep } from '@/utils/tools';
 
 const formState = reactive({
   username: '',
@@ -61,9 +61,11 @@ const { t } = useI18n({
     },
   }
 })
+
 const placeholderUserName = t('placeholder', {
   message: t('username')
 }) + '：yangjx'
+
 const placeholderPassword = t('placeholder', {
   message: t('password')
 }) + '：123456'
@@ -85,8 +87,6 @@ const rulesRef = reactive({
 
 const { resetFields, validate, validateInfos } = useForm(formState, rulesRef);
 
-
-
 async function commitLogin () {
   if(state.loading) return;
   state.loading = true  
@@ -100,7 +100,7 @@ async function commitLogin () {
       return res.data?.data?.[0]?.id
     })
 
-    const user = await apiLoginDoLogin({
+    await apiLoginDoLogin({
       disableErrorAlert: true,
       data: {
         userName: formState.username,
@@ -112,9 +112,8 @@ async function commitLogin () {
     })
     
     router.replace({
-      name: 'ROUTE_TEST'
+      name: 'ROUTE_HOME'
     })
-    console.log("登录信息", user)
   } catch (err: any) {
     message.error(err.message)
   } finally {

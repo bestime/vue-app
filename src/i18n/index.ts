@@ -1,4 +1,4 @@
-import { getLanguage } from "@/utils";
+import { getLanguage } from "@/utils/tools";
 import {createI18n} from "vue-i18n";
 
 export type TLocals = 'zh' | 'en'

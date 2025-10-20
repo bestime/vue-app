@@ -7,9 +7,10 @@ import "@/styles/index.scss"
 import i18n from './i18n';
 import { reloadRoutes } from './permission';
 
-
+const notCheckPath = ['#/permission-preview', '#/login', '#/', '']
+const needCheck = notCheckPath.includes(window.location.hash)
 const app = createApp(App)
-reloadRoutes().then(function () {
+reloadRoutes(needCheck).then(function () {
   app.use(router)
   app.use(Antd)
   app.use(i18n);

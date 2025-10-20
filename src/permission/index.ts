@@ -4,7 +4,19 @@ import { IS_DEV, PERMISSIONID_SHARE } from "@/utils/constant";
 import { PERMISSID_DEV } from "@/utils/constant";
 import { last } from "lodash-es";
 import router, { routeList } from "@/router";
+import { message } from 'ant-design-vue';
 
+/**
+ * 缓存当前权限ID集
+ */
+let permissionIds: string[] = []
+
+
+/**
+ * 获取路由表单项配置的权限ID
+ * @param item 
+ * @returns 
+ */
 function getMetaPpermissionId (item: RouteRecordRaw) {
   // 正式版暂时屏蔽废弃的页面
   if(item.meta?.deprecated === true && import.meta.env.VITE_APP_RUNMODE === '正式版') {
@@ -13,6 +25,12 @@ function getMetaPpermissionId (item: RouteRecordRaw) {
   return item.meta?.permissionId as string | undefined
 }
 
+/**
+ * 筛选有权限的路由
+ * @param data 
+ * @param routeNames 
+ * @returns 
+ */
 function filterPermissionRoutes (data: Array<RouteRecordRaw>, routeNames: string[]) {
   const newList = jUtilsBase.treeFilter(data, function (item) {
     let isSafeIn = routeNames.includes(item.name as string)
@@ -28,25 +46,12 @@ function filterPermissionRoutes (data: Array<RouteRecordRaw>, routeNames: string
 }
 
 /**
- * 通过浏览器地址栏获取当前vue路由fullPath
+ * 根据权限更新路由表
  * @param router 路由实例
- * @returns 重定向 fromPath（当前浏览器地址栏的地址与vue路由不匹配时，可用此地址重定向）
+ * @param allRoutes 完整的路由表
+ * @param routeNames 有权限的路由名
  */
-function getCurrentRouteFullPath (router: Router) {
-  const base = router.options.history.base
-  const isHash = /#$/.test(base)
-  let fullPath = ''
-  const cPath = router.currentRoute.value.path
-  if(isHash) {
-    fullPath = window.location.hash.replace(/.*#(.*?)(\?.*)?$/, '$1')
-  } else {
-    fullPath = window.location.pathname.replace(new RegExp(base), '')
-  }
-  return cPath === fullPath && fullPath !== '' ? void 0 : fullPath
-}
-
-async function updatePermissionRoutes (router: Router, allRoutes: Array<RouteRecordRaw>, routeNames: string[], redirect?: boolean) {
-  redirect = jUtilsBase.isNull(redirect) ? true : redirect
+async function updatePermissionRoutes (router: Router, allRoutes: Array<RouteRecordRaw>, routeNames: string[]) {
   const newRoutes = filterPermissionRoutes(allRoutes, routeNames)
   const oldRoutes = router.getRoutes()
   
@@ -67,24 +72,49 @@ async function updatePermissionRoutes (router: Router, allRoutes: Array<RouteRec
       }      
     }
   })
-
-
-  if(redirect) {
-    const fromPath = getCurrentRouteFullPath(router)
-    if(fromPath) {
-      const toRoute = router.getRoutes().find(function (c) {
-        return c.path === fromPath
-      })
-      if(toRoute) {
-        await router.replace(toRoute)
-      }
-    }
-  }
 }
 
-let permissionIds: string[] = []
+/**
+ * 获取当前有权限的路由（请等待权限刷新后再使用）
+ * @returns 
+ */
+export function getRouteNames () {
+  return parseJavaPermissionToRouteName(permissionIds, routeList)
+}
 
-export async function reloadRoutes () {
+/**
+ * 将权限ID解析为对应的路由名
+ * @param data 权限ID集合
+ * @param routeList 路由表
+ * @returns 
+ */
+function parseJavaPermissionToRouteName (data: string[], routeList:RouteRecordRaw[]) {
+  const ids = [PERMISSIONID_SHARE].concat(data)
+  const result: Array<string> = []
+  jUtilsBase.forEachTree(routeList, function (item) {
+    const psid = getMetaPpermissionId(item)
+    let hasShow = jUtilsBase.isNull(psid) ? false : ids.includes(psid)
+    if(!hasShow && item.children) {
+      const paths = jUtilsBase.deepFindItem(item.children, function (dp) {
+        const psid = getMetaPpermissionId(dp)
+        return jUtilsBase.isNull(psid) ? false : ids.includes(psid)
+      })
+      hasShow = !!paths
+    }
+
+    if(hasShow && jUtilsBase.isString(item.name)) {
+      result.push(item.name)
+    }
+  })
+  return result
+}
+
+/**
+ * 刷新路由
+ * @returns 
+ */
+export async function reloadRoutes (disabled?: boolean) {
+  if(disabled === true) return;
   const res = await apiLoginLoginResultData().then(function (_) {
     return _.data.data
   }).catch(function () {
@@ -105,33 +135,20 @@ export async function reloadRoutes () {
   } 
   const pNames = getRouteNames()
   // console.log("当前用户的权限", permissionIds)
-  await updatePermissionRoutes(router, routeList, pNames, false)    
+  await updatePermissionRoutes(router, routeList, pNames)    
   return {
     permissionIds
   }
 }
 
-export function getRouteNames () {
-  return parseJavaPermissionToRouteName(permissionIds, routeList)
-}
 
-function parseJavaPermissionToRouteName (data: string[], routeList:RouteRecordRaw[]) {
-  const ids = [PERMISSIONID_SHARE].concat(data)
-  const result: Array<string> = []
-  jUtilsBase.forEachTree(routeList, function (item) {
-    const psid = getMetaPpermissionId(item)
-    let hasShow = jUtilsBase.isNull(psid) ? false : ids.includes(psid)
-    if(!hasShow && item.children) {
-      const paths = jUtilsBase.deepFindItem(item.children, function (dp) {
-        const psid = getMetaPpermissionId(dp)
-        return jUtilsBase.isNull(psid) ? false : ids.includes(psid)
-      })
-      hasShow = !!paths
-    }
-
-    if(hasShow && jUtilsBase.isString(item.name)) {
-      result.push(item.name)
-    }
-  })
-  return result
+const excludeNames = ['ROUTE_APP_ROOT', 'ROUTE_LOGIN_ROOT', 'ROUTE_APP_MANAGE']
+export function getFirstRouteName () {
+  const names = getRouteNames()  
+  const res = names.find(c=>!excludeNames.includes(c))
+  if(!res) {
+    message.error('请确认该账号权限是否配置正确！')
+  }
+  console.log("第一个", res)
+  return res
 }

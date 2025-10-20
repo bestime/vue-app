@@ -25,12 +25,13 @@
 
 <template>
   <div class="Manage">
-    <LayoutMenu ref="menu-ref" :collapsed="state.isOpen" @on-tab-change="onTabChange" :clearId="state.clearId"/>
+    <LayoutMenu ref="menu-ref" :collapsed="state.isOpen" @on-tab-change="onTabChange" :clearId="state.clearId" @on-menu-update="onMenuChange"/>
     <div class="page-container">
       <LayoutHeader v-model:collapsed="state.isOpen"/>
       <!-- <h1>{{state.routeKey}}</h1>
       <h2>{{state.aliveNames}}</h2> -->
       <LayoutTabs :tags="state.tabList" @on-refresh="onRefreshTab" @on-remove="toRemove"/>
+      <LayoutBreadcrumb :meunTree="state.menus"/>
       <RouterView #default="{Component, route}">
         <KeepAlive ref="ref-alive" :include="state.aliveNames">
           <component :is="Component" :key="state.routeKey"/>
@@ -47,11 +48,13 @@ import LayoutTabs, { type ITabItem } from './components/LayoutTabs/index.vue'
 import LayoutHeader from './components/LayoutHeader/index.vue'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
 import { cloneDeep } from 'lodash-es'
+import LayoutBreadcrumb from './components/LayoutBreadcrumb/index.vue'
 
 
 const route = useRoute()
 const iCache = useTemplateRef('ref-alive')
 const state = reactive({
+  menus: [] as IMenuItem[],
   clearId: 0,
   isOpen: false,
   tabList: [] as ITabItem[],
@@ -64,6 +67,10 @@ const state = reactive({
 })
 
 const iMenu = useTemplateRef('menu-ref')
+
+function onMenuChange (v: IMenuItem[]) {
+  state.menus = v
+}
 
 function onTabChange (data: ITabItem[], newKey?: string) {
   const newOpen = !jUtilsBase.isNull(newKey) && !!state.aliveKeys[newKey] && !state.tabList.some(c=>c.uid === newKey)

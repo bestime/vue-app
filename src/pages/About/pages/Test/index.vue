@@ -9,6 +9,7 @@
 
 <template>
   <div class="Test">
+    <a-button @click="toDeta">跳转到测试页详情，菜单保持高亮</a-button>
     <a-table :dataSource="state.testData" :columns="state.tableColumns" />
   </div>  
 </template>
@@ -17,6 +18,9 @@
 import { reactive, onBeforeUnmount, onMounted, watch } from 'vue'
 import { apiThreemeetingArchiveGetThreeMeetingArchiveList } from '@/services'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const { t, locale } = useI18n({
   useScope: 'global',
@@ -34,6 +38,12 @@ const { t, locale } = useI18n({
 defineOptions({
   name: 'ROUTE_TEST'
 })
+
+function toDeta () {
+  router.push({
+    name: 'ROUTE_TEST_DETAIL'
+  })
+}
 
 
 

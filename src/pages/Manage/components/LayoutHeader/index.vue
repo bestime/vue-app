@@ -72,7 +72,7 @@ import {
 } from '@ant-design/icons-vue';
 import { apiLoginLoginResultData, apiLoginLogout } from '@/services';
 import { useRouter } from 'vue-router';
-import { setLanguage } from '@/utils';
+import { setLanguage } from '@/utils/tools';
 const router = useRouter()
 
 const state = reactive({

@@ -1,12 +1,8 @@
 declare global {
   /** 项目打包时间戳 */
   var viteBuildTime: string
-  const WxLogin: any
 
   interface Window {
-    /** 导出前端日志 */
-    exportRuntimeLogToJson: ()=> void
-    setTimeout: any
     
   }  
 }
