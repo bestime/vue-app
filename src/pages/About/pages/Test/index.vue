@@ -8,10 +8,14 @@
 </style>
 
 <template>
-  <div class="Test">
+  <LoadingWrapper class="Test" :loading="state.loading">
     <a-button @click="toDeta">跳转到测试页详情，菜单保持高亮</a-button>
-    <a-table :dataSource="state.testData" :columns="state.tableColumns" />
-  </div>  
+    <ATableSizeBox class="table-panel"  style="height: 500px" :updateKey="state.tableUpdateId">
+      <template #default="{ scroll }">
+        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns" />
+      </template>      
+    </ATableSizeBox>    
+  </LoadingWrapper>
 </template>
 
 <script lang="ts" setup>
@@ -19,6 +23,8 @@ import { reactive, onBeforeUnmount, onMounted, watch } from 'vue'
 import { apiThreemeetingArchiveGetThreeMeetingArchiveList } from '@/services'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import LoadingWrapper from '@/components/LoadingWrapper/index.vue'
+import ATableSizeBox from '@/components/ATableSizeBox/index.vue'
 
 const router = useRouter()
 
@@ -48,6 +54,8 @@ function toDeta () {
 
 
 const state = reactive({
+  tableUpdateId: '',
+  loading: false,
   tableColumns: [] as any[],
   testData: [] as any[]
 })
@@ -69,14 +77,22 @@ function getColumns () {
 
 
 
-apiThreemeetingArchiveGetThreeMeetingArchiveList({
-  data: {
-    dept: '5',
-    type: '1'
-  }
-}).then(function (res) {
-  state.testData = res.data.data
-})
+
+
+async function updateList () {
+  state.loading = true
+  apiThreemeetingArchiveGetThreeMeetingArchiveList({
+    data: {
+      dept: '5',
+      type: '1'
+    }
+  }).then(function (res) {
+    state.testData = res.data.data
+    state.tableUpdateId = jUtilsBase.uuid()
+  }).finally(function () {
+    state.loading = false
+  })
+}
 
 
 watch(() => locale.value, function () {
@@ -87,6 +103,7 @@ watch(() => locale.value, function () {
 
 onMounted(function () {
   console.log("测试页加载了")
+  updateList()
 })
 </script>
 

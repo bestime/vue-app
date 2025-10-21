@@ -19,7 +19,8 @@ declare function observeDomResize(
   element: HTMLElement,
   handler: (element: HTMLElement) => void,
   type?: ('width' | 'height' | 'position')[],
-  interval?: number
+  interval?: number,
+  immediate?: boolean
 ): () => void;
 
 /**
