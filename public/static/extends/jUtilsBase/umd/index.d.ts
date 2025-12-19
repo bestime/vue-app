@@ -61,7 +61,7 @@ declare function isString(data: any): data is string;
 declare function _KvPair(data: any): TKvPair;
 
 /**
- * 判断是否为空[null, undefined, '']
+ * 判断是否为空[null, undefined, '','-']
  * @params data - 判断的数据
  * @returns 判断结果
  */
@@ -171,7 +171,7 @@ interface IdataCacheCAllback {
  * @param url - 请求地址
  * @returns 处理工具
  */
-declare function dataCache(url: string): IdataCacheCAllback;
+declare function dataCache(url: string, record?: Record<string, any>): IdataCacheCAllback;
 
 /**
  * 检测一个数据是否存在
@@ -206,7 +206,7 @@ declare function deepFindTreePath(
     id: string;
     children: string;
   }
-): undefined | any[];
+): any[];
 
 /**
  * 强制转换数据为字符串。支持百分号、千分位
@@ -216,7 +216,13 @@ declare function deepFindTreePath(
 declare function _Number(data?: any): number;
 
 type TNull = undefined | null | '';
-declare function isNull(data: any): data is TNull;
+/**
+ * 判断数据是否为空
+ * @param data 待判断数据。null、undefined、空字符串 都将视为空
+ * @param whiteList 特殊需求。默认将 [‘-’] 也视为空数据
+ * @returns
+ */
+declare function isNull(data: any, whiteList?: string[]): data is TNull;
 
 /**
  * 匹配数字的正则
@@ -248,8 +254,8 @@ declare function isLikeNumber(value: any): boolean;
 
 /**
  * 循环复制字符串
- * @param data - 复制目标
- * @param count - 复制几次
+ * @param target - 复制目标
+ * @param count - 目标长度
  * @returns 结果
  */
 declare function repeatString(target: string | number, count: number): string;
@@ -352,7 +358,7 @@ declare function changeIndex(maxIndex: number, currentIndex: number, increase: n
  * @param length - id长度
  * @returns 生成的ID字符串
  */
-declare function uuid(length: number): string;
+declare function uuid(length?: number): string;
 
 /**
  * 生成指定范围随机数
@@ -466,6 +472,7 @@ declare function forEach<T>(
 
 /**
  * 获取随机颜色
+ * @return rgba颜色值
  */
 declare function randomColor(): string;
 
@@ -545,6 +552,7 @@ declare function dataPage<T>(
  */
 declare function parseQuery(str?: string): TKvPair;
 
+type TValidator<T> = (data: T) => void | string | undefined;
 declare const fieldCheck: {
   /**
    * 验证传入的数据是否是数字
@@ -553,7 +561,15 @@ declare const fieldCheck: {
    * @param required - 是否必填
    * @returns
    */
-  number(title: string, value: any, required?: boolean): number;
+  number(
+    title: string,
+    value: any,
+    required?: boolean,
+    validator?: TValidator<number>
+  ): {
+    value: number;
+    error: string | void | undefined;
+  };
   /**
    * 验证传入的数据是否是字符串
    * @param title - 标题
@@ -561,7 +577,15 @@ declare const fieldCheck: {
    * @param required - 是否必填
    * @returns
    */
-  string(title: string, value: any, required?: boolean): string;
+  string(
+    title: string,
+    value: any,
+    required?: boolean,
+    validator?: TValidator<string>
+  ): {
+    value: string;
+    error: string | void | undefined;
+  };
 };
 
 interface ISummary {
@@ -849,6 +873,7 @@ declare function getRatio(value: number | undefined, base: number | undefined): 
 
 /**
  * 计算一个数据变化的增长率
+ *
  * @param from
  * @param to
  * @returns
@@ -861,10 +886,10 @@ declare function getRiseRatio(from?: number, to?: number): number;
  * @param predicate - 迭代回调
  * @returns 筛选的结果
  */
-declare function filterWithMove<T, S extends T>(
+declare function filterWithMove<T>(
   data: T[],
-  predicate: (value: T, index: number, array: T[]) => value is S
-): S[];
+  predicate: (value: T, index: number, array: T[]) => boolean
+): T[];
 
 type TUnits = [number, string];
 /**
@@ -881,6 +906,7 @@ declare function export_default(
 ): {
   value: number;
   fmtValue: string;
+  data: number;
   unit: string;
 };
 
@@ -969,14 +995,16 @@ declare function treeLeafs<T extends TKvPair>(list: TreeItem$1<T>[]): TreeItem$1
 /**
  * 默认数据处理
  * @param placeValue - 无值时返回什么数据
- * @param value - 需要处理的数据
+ * @param value - 需要处理的数据。默认将 undefined、null、'' 视为无值
  * @param formatter - 数据格式化
+ * @param whiteList 特殊需求。默认将 [‘-’] 也视为空数据
  * @returns
  */
 declare function defualtFormatter<T, R>(
   placeValue: R,
   value: T,
-  formatter?: (value: NonNullable<T>) => R
+  formatter?: (value: NonNullable<T>) => R,
+  whiteList?: string[]
 ): R;
 
 type TEasingHandler = (
@@ -1047,7 +1075,10 @@ declare function throttle<T extends EventHander>(
 };
 
 /**
+ *
+ * @deprecated 已废弃，请使用getMinAndMax
  * 将一堆数字中的极值按差值的比例进行扩大。多用于echarts坐标轴的极值限制
+ *
  * @param ratio 扩大倍数
  * @param data 数据
  * @returns
@@ -1080,6 +1111,345 @@ declare function findLast<T>(
   handler: (value: T, index: number, obj: T[]) => boolean
 ): T | undefined;
 
+/**
+ * 数组find方法的键值对版本
+ * @param data
+ * @param handler
+ * @returns
+ */
+declare function findKvPair<T extends TKvPair>(
+  data: T,
+  handler: (data: TValueOf<T>, key: string) => boolean
+): T[Extract<keyof T, string>] | undefined;
+
+type TSizeUnit = 'Byte' | 'KB' | 'MB' | 'GB' | 'TB';
+declare function fileSizeFormatter(
+  byte: number,
+  formatter: (data: number) => string
+): {
+  value: number;
+  unit: string;
+  text: string;
+};
+declare function fileSizeToNumber(data: number, unit: TSizeUnit): number;
+
+/**
+ * 颜色的rgba转十六进制
+ * @param rgba 带转换颜色字符串。格式： `rgba(0,0,0,1)` 或 `rgb(255,255,255)`
+ * @returns 十六进制值
+ */
+declare function rgbaToHex(rgba: string): string;
+
+/**
+ * 十六进制颜色转rgb
+ * @param hex
+ * @returns
+ */
+declare function hexToRgba(hex: string, alpha?: number): string;
+
+/**
+ * 获取一个数组中的最大值
+ * @param data 数组
+ * @param handler 迭代函数
+ * @returns 最大值
+ */
+declare function max<T>(
+  data: Array<T>,
+  handler: (item: T) => number | undefined
+): number | undefined;
+
+/**
+ * 获取一个数组中的最小值
+ * @param data 数组
+ * @param handler 迭代函数
+ * @returns 最大值
+ */
+declare function min<T>(
+  data: Array<T>,
+  handler: (item: T) => number | undefined
+): number | undefined;
+
+/**
+ * 将数字转为大写
+ * @param digit
+ * @param isRmb
+ * @returns
+ */
+declare function numberToChinese(digit: number, isRmb?: boolean): string;
+
+type ISortItem = number | undefined | null;
+/**
+ * 数组排序的迭代方法（多用于多个条件优先级排序）
+ * @param way 排序方式 asc 从a至b升序；desc 从a至b降序
+ * @param a
+ * @param b
+ * @returns 如果返回数字，怎么不管，如果返回undefined，则继续下一个排序规则，直到排序完成
+ *
+ * @example
+ * ```ts
+ *
+ * data.sort(function (a, b) {
+ *   const sort01 = ortCompare('asc', a.price, b.price)
+ *   const sort02 = ortCompare('asc', a.age, b.age)
+ *   return sort01 ?? sort02 ?? 0
+ * })
+ * ···
+ */
+declare function sortCompare(way: 'asc' | 'desc', a: ISortItem, b: ISortItem): number | undefined;
+
+interface LogItem {
+  id: string;
+  time: string;
+  pid?: string;
+  title: string;
+  data?: string;
+}
+declare function logRecord(
+  title: string,
+  data?: string,
+  notPrint?: boolean
+): (title: string, data?: string) => void;
+declare function logExport(): {
+  flatList: LogItem[];
+  treeList: any[];
+};
+
+type TCallback = (ms: number) => void;
+type THander$1 = (callback: TCallback) => void;
+/**
+ * 每隔一段时间更新服务器时间与本地时间差（为了不频繁去请求服务器）
+ *
+ */
+declare class ServerDate {
+  private _diff;
+  private _interval;
+  private _handler;
+  private _timer;
+  private _actionId;
+  private _isRuning;
+  /**
+   *
+   * @param interval - 多久更新一次时间差
+   * @param _handler - 用户去获取服务器时间的代码
+   */
+  constructor(interval: number, _handler: THander$1);
+  private _refresh;
+  /**
+   * 更新一次服务器时间
+   */
+  updateOnce(callback: () => void): void;
+  /**
+   * 定时更新服务器时间
+   */
+  play(): this;
+  /**
+   * 暂停定时更新服务器时间
+   * @returns
+   */
+  pause(): this;
+  getDiff(): number;
+  /**
+   * 获取服务器当前时间戳（请确保play() 已经执行成功）
+   * @returns
+   */
+  getTime(): number;
+}
+
+declare function breakString(rowLength: number, data?: string): string[];
+
+/**
+ * 获取一个时间是当年第几周
+ * @param endTime - 目标时间
+ * @returns 第几周
+ */
+declare function getWeekSort(endTime: string): number;
+/**
+ * 获取截至指定时间的周列表
+ * @param endTime 截止时间（起始时间为此年初）
+ * @param count 需要几周，如果此年不足数量，则向往年取时间，不填则仅后去当年数据
+ * @returns 周列表
+ */
+declare function getWeeks(
+  endTime: string,
+  count?: number
+): {
+  week: number;
+  label: string;
+  from: string;
+  to: string;
+}[];
+
+type TVu = string | number;
+/**
+ * 格式化一个范围
+ * @param from 起始值
+ * @param to 终止值
+ * @param connector 连接符
+ * @returns
+ */
+declare function formatRange(from?: TVu, to?: TVu, connector?: string): string;
+
+/**
+ * 获取一个路径的文件名（最后一级的名称）
+ * @param path 原始路径
+ * @returns 文件名
+ */
+declare function getFileName(path?: string): string;
+
+/**
+ * 循环补充数组到指定长度
+ * @param data - 复制目标
+ * @param length - 目标长度
+ * @returns 结果
+ */
+declare function repeatArray<T>(target: T[], length: number): T[];
+
+declare function checkPhone(data: any): boolean;
+
+type TReturnV = number | undefined;
+/**
+ * 获取数字中的最小和最大值
+ * @param data - 原始数据
+ * @param config - 额外配置项
+ * @param config.spaceRatio - 默认值：0，根据最小、最大值的差值，将最小值减小几倍，将最大值增大几倍
+ * @param config.getter - 迭代函数（复杂结构需要），默认仅处理数字
+ * @param config.formatter - 将最终结果格式化
+ * @returns 计算后的最大、最小值
+ */
+declare function getMinAndMax<T>(
+  data: Array<T>,
+  config?: {
+    spaceRatio?: number;
+    getter?: (item: T) => TReturnV;
+    formatter?: (item: number) => number;
+  }
+): {
+  min: TReturnV;
+  max: TReturnV;
+};
+
+/**
+ * 创建一个ID生成器，用于将字符串变为ID，相同字符串ID不变（进当前会话有效，不可用于固定ID）
+ * @param prefix
+ * @returns
+ */
+declare function createIdFactory(prefix: string): (name: string) => string;
+
+/**
+ * 截取数组从指定索引到指定长度（不改变原数组）
+ * @param data 原始数组
+ * @param fromIndex 开始索引
+ * @param length 获取长度
+ * @returns
+ */
+declare function getArray<T>(data: T[], fromIndex: number, length: number): T[];
+
+/**
+ * 给数字添加正负号
+ * @param data - 原始数字
+ * @returns 正负数字字符串
+ */
+declare function signNumber(data: number | undefined): string;
+
+/**
+ * 变量名转小驼峰
+ * @param data
+ * @returns
+ */
+declare function toCamelCase(data: string): string;
+
+type THander<T> = (item: T) => boolean;
+/**
+ * 移除数组中的数据（直接改变原数组）
+ * @param data - 原始数据
+ * @param handler - 迭代函数
+ */
+declare function arrayRemove<T>(data: T[], handler: THander<T>): void;
+
+type TBusinessTypeKey = 1 | 2 | 3 | 4;
+interface IOption {
+  headers: {
+    attrId: string;
+    attrName: string;
+    attrKey: string;
+  }[];
+  dataInfo: {
+    id: string;
+    order: number;
+    taskId: string;
+    content: string;
+    type: TBusinessTypeKey;
+    url: string;
+  }[];
+  row: {
+    comment: string;
+    completeRate?: number;
+    completeValue?: number;
+    id: string;
+    order: number;
+    parentTaskId: string;
+    scoreActual?: number;
+    attrs: {
+      attrId: string;
+      value: string;
+    }[];
+  }[];
+}
+interface IUseTableHeader {
+  attrId: string;
+  field: string;
+  label: string;
+  colspan: number;
+}
+interface IUseCellV {
+  /** 前端循环用的key */
+  key: string;
+  /** 单元格映射的ID */
+  cellId: string | undefined;
+  /** 单元格其中一项的内容 */
+  content: string;
+  /** 数据类型 */
+  businessType: TBusinessTypeKey;
+  businessTypeName: string;
+  /** 用于具体接口传参用 */
+  businessId: string | undefined;
+  /** 点击后跳转的链接 */
+  businessLink: string | undefined;
+  /** 是否可点击 */
+  clickable: boolean;
+}
+interface IUseTableCell {
+  id: string;
+  meta: {
+    attrId: string;
+    comment: string;
+    scoreActual: string;
+    completeRate: string;
+    completeValue: string;
+  };
+  colspan: Record<string, number>;
+  rowspan: Record<string, number>;
+  cell: Record<string, IUseCellV[]>;
+}
+interface IZjxkjPFMTCfg {
+  clickable: boolean;
+}
+/**
+ * 智界新科技：解析交易中心业绩合同表为一维数组
+ * @remarks 前台、后台都在使用，为了不让同事误改此方法，所以封装在自己工具库里
+ *
+ * @param query - 接口返回的数据
+ * @returns 给前端方便使用的数据格式
+ */
+declare function zjxkjPerformanceTable(
+  query: IOption,
+  config?: Record<string, IZjxkjPFMTCfg>
+): {
+  headers: IUseTableHeader[];
+  body: IUseTableCell[];
+  totalScore: number;
+};
+
 declare global {
   /**
    * 该声明文件用于全局声明（不用npm安装时拷贝到项目中直接使用）
@@ -1088,16 +1458,21 @@ declare global {
     export {
       Animate,
       Polling,
+      ServerDate,
       TArrayRowToColumnCalculateRow,
       _Array,
       _Boolean,
       _KvPair,
       _Number,
       _String,
+      arrayRemove,
       arrayRowToColumn,
+      breakString,
       changeIndex,
+      checkPhone,
       cloneEasy,
       _default as connectEcharts,
+      createIdFactory,
       dataCache,
       dataPage,
       debounce,
@@ -1107,21 +1482,31 @@ declare global {
       defualtFormatter,
       difference,
       fieldCheck,
+      fileSizeFormatter,
+      fileSizeToNumber,
       filterWithMove,
+      findKvPair,
       findLast,
       floorFixed,
       forEach,
       forEachKvPair,
       forEachTree,
+      formatRange,
       formatTime,
       fuzzyReplace,
+      getArray,
+      getFileName,
       getLikeNumberRegExp,
+      getMinAndMax,
       getPiecesWithIndex,
       getRandom,
       getRatio,
       getRiseRatio,
       getSortIndex,
       getType,
+      getWeekSort,
+      getWeeks,
+      hexToRgba,
       isArray,
       isEmpty,
       isFunction,
@@ -1131,9 +1516,14 @@ declare global {
       isNull,
       isString,
       listGroup,
+      logExport,
+      logRecord,
       mapKvPair,
       main as mapTree,
+      max,
+      min,
       mixInZeroWidthUnicode,
+      numberToChinese,
       padEnd,
       padMinMax,
       padStart,
@@ -1141,15 +1531,20 @@ declare global {
       parseQuery,
       parseTreeToTableHeader,
       randomColor,
+      repeatArray,
       repeatString,
+      rgbaToHex,
       roundFixed,
       shake,
       export_default as shortNumber,
+      signNumber,
+      sortCompare,
       sortWithIndex,
       spanTable,
       split,
       thousands,
       throttle,
+      toCamelCase,
       flatArrayToTree as tree,
       treeFilter,
       treeLeafs,
@@ -1157,7 +1552,8 @@ declare global {
       union,
       urlToGet,
       uuid,
-      variableHasValue
+      variableHasValue,
+      zjxkjPerformanceTable
     };
   }
 }

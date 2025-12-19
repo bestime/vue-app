@@ -19,7 +19,8 @@ declare function observeDomResize(
   element: HTMLElement,
   handler: (element: HTMLElement) => void,
   type?: ('width' | 'height' | 'position')[],
-  interval?: number
+  interval?: number,
+  immediate?: boolean
 ): () => void;
 
 /**
@@ -35,6 +36,13 @@ declare function downloadFileByUrl(url: string, fileName: string): void;
  * @param fileName - 文件名
  */
 declare function downloadFileByArrayBuffer(data: ArrayBuffer, fileName: string): void;
+
+/**
+ * 下载Blob文件
+ * @param data - 数据
+ * @param fileName - 文件名
+ */
+declare function downloadFileByBolb(data: Blob, fileName: string): void;
 
 /**
  * 移除Dom节点
@@ -97,6 +105,7 @@ interface LibraryFileConfig {
   dependencies?: LibraryFileConfig[];
   with?: LibraryFileConfig[];
   attribute?: Record<string, string>;
+  interceptor?: (libInstence: any) => void;
 }
 type SuccessCallback = (...args: any[]) => void;
 /**
@@ -186,7 +195,7 @@ type Direction = 1 | -1;
  * @param isPrevent 是否阻止原生滚动，仅用来获取滚动方向
  * @returns
  */
-declare function export_default$1(
+declare function observeMouseWheel(
   el: HTMLElement,
   callback: (direction: Direction) => void,
   isPrevent: boolean
@@ -195,7 +204,7 @@ declare function export_default$1(
 };
 
 type TCallbackHandler = (next: () => void) => void;
-interface IOptions {
+interface IOptions$3 {
   onBottom?: TCallbackHandler;
   onTop?: TCallbackHandler;
   /** Y轴触底、触顶的差值 */
@@ -208,7 +217,7 @@ interface IOptions {
  */
 declare function export_default(
   el: HTMLElement,
-  config?: IOptions
+  config?: IOptions$3
 ): {
   /**
    * 销毁
@@ -229,15 +238,214 @@ declare function fullScreen(
   callabck?: TFullScreenActionCallback
 ): void;
 
+declare function createXLSX(options: {
+  pluginUrl: string;
+  header: any[];
+  body: any[];
+}): Promise<HTMLTableElement>;
+
+interface IPluginSrc {
+  /** .mjs结尾的主文件 */
+  index: string;
+  /** .mjs结尾的worker文件 */
+  worker: string;
+}
+declare function pdfToImage(
+  url: string,
+  canvas: HTMLCanvasElement,
+  src: IPluginSrc
+): Promise<unknown>;
+
+/**
+ * 动态计算弹出框位置，使之保持在可是范围内。多用于跟随鼠标移动的菜单或信息框
+ * @param options - 配置项
+ * @returns - 计算后的位置
+ */
+declare function infoContainerPosition(options: {
+  /** 需要将容器设置到：坐标X */
+  x: number;
+  /** 需要将容器设置到：坐标Y */
+  y: number;
+  /** 容器宽度 */
+  width: number;
+  /** 容器高度 */
+  height: number;
+  /** 与目标位置X偏移量。默认 10 */
+  offsetX?: number;
+  /** 与目标位置Y偏移量。默认 10 */
+  offsetY?: number;
+  /** 距离视口多少时表示超出可视范围。默认 10*/
+  padding?: number;
+  mode?: 'top-right' | 'bottom-right';
+  /** 在什么区域活动 */
+  targetSize?: {
+    width: number;
+    height: number;
+  };
+}): {
+  x: number;
+  y: number;
+};
+
+interface IOptions$2 {
+  text?: string;
+  fontSize?: number;
+  color?: string;
+  reverse?: boolean;
+  interval?: number;
+}
+interface IPointItem {
+  text: string;
+  x: number;
+  y: number;
+  speed: number;
+}
+declare class TextRainCanvas {
+  text: string;
+  fontSize: number;
+  color: number[];
+  reverse: boolean;
+  isStop: boolean;
+  interval: number;
+  width: number;
+  height: number;
+  fontLineHeight: number;
+  count: number;
+  oCanvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  timer: any;
+  pointList: {
+    currentIndex: number;
+    list: IPointItem[];
+  }[];
+  constructor(oCanvas: HTMLCanvasElement, option?: IOptions$2);
+  draw(): void;
+  createColumn(
+    x: number,
+    y: number
+  ): {
+    currentIndex: number;
+    list: IPointItem[];
+  };
+  dispose(): void;
+  start(): void;
+  getPointList(): {
+    currentIndex: number;
+    list: IPointItem[];
+  }[];
+}
+
+declare class SeamlessRolling {
+  _wrapper: HTMLDivElement;
+  _timer: any;
+  constructor(wraper: HTMLDivElement);
+  _updateContent(): void;
+  _doScroll(): void;
+  dispose(): void;
+}
+
+declare function func01(text: string): Promise<void>;
+/**
+ * 复制文本
+ */
+declare const copyText: typeof func01;
+
+interface IColorItem {
+  data: number;
+  color: string;
+}
+interface IOptions$1 {
+  fontFamily: string;
+  fontSize: number;
+  tickWidth: number;
+  tickColor: string;
+  fontColor: string;
+  paddingTop: number;
+  paddingBottom: number;
+  labelFormatter?: (data: number) => string;
+  colors: IColorItem[];
+}
+interface IUseColorItem {
+  from: {
+    value: number;
+    color: string;
+    ratio: number;
+  };
+  to: {
+    value: number;
+    color: string;
+    ratio: number;
+  };
+  ratio: number;
+  label: string;
+}
+declare class LinearGradientColorLegend {
+  _cfg: IOptions$1;
+  _canvas: HTMLCanvasElement | undefined;
+  _colorList: IUseColorItem[];
+  _ctx: CanvasRenderingContext2D | undefined;
+  _minValue: number;
+  _maxValue: number;
+  constructor(options: Partial<IOptions$1>);
+  mount(oCanvas: HTMLCanvasElement): void;
+  _drawAxias(
+    width: number,
+    height: number
+  ): {
+    maxLabelWidth: number;
+  };
+  _draw(): this | undefined;
+  setColors(colors: IColorItem[]): this;
+  /**
+   * 根据值获取颜色
+   * @param value
+   * @returns
+   */
+  getColor(value: number): string;
+}
+
+interface IOptions {
+  disabled?: boolean;
+  gapX: number;
+  gapY: number;
+  text: string[];
+  /** 行高（仅支持倍率） */
+  fontLineHeight: number;
+  fontSize: number;
+  fontBackgroundColor: string;
+  fontFamily: string;
+  fontColor: string;
+  /** 旋转角度（0-360） */
+  angle: number;
+}
+declare class WaterMark {
+  _cfg: IOptions;
+  _oWrapper: HTMLDivElement;
+  _canvas: HTMLCanvasElement;
+  constructor(oWrapper: HTMLDivElement, config: Partial<IOptions>);
+  _reload(): HTMLCanvasElement;
+  setConfig(config: Partial<IOptions>): void;
+  _draw(): void;
+}
+
+declare const style: (str: string) => void;
+
 declare global {
   /**
    * 该声明文件用于全局声明（不用npm安装时拷贝到项目中直接使用）
    */
   namespace jUtilsBrowser {
     export {
+      LinearGradientColorLegend,
+      SeamlessRolling,
+      TextRainCanvas,
+      WaterMark,
       addClass,
       _default as browser,
+      copyText,
+      createXLSX,
       downloadFileByArrayBuffer,
+      downloadFileByBolb,
       downloadFileByUrl,
       fullScreen,
       getCookie,
@@ -246,10 +454,12 @@ declare global {
       getRelativePos,
       getStorage,
       getWindowSize,
+      infoContainerPosition,
       libraryFile,
       observeDomResize,
       export_default as observeDomScroll,
-      export_default$1 as observeMouseWheel,
+      observeMouseWheel,
+      pdfToImage,
       prevent,
       removeClass,
       removeCookie,
@@ -258,6 +468,7 @@ declare global {
       replaceClass,
       setCookie,
       setStorage,
+      style,
       toggleClass
     };
   }

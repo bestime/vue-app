@@ -1,22 +1,19 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
-    "env.d.ts",
+    "types/env.d.ts",
     "src/**/*",
     "src/**/*.vue",
-  "public/static/extends/jUtilsBase/umd/index.d.ts",
+    "public/static/extends/jUtilsBase/umd/index.d.ts",
     "public/static/extends/jUtilsBrowser/umd/index.d.ts"
+    
   ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
-    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": [
       "element-plus/global"
-      
     ],
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

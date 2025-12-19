@@ -1,32 +1,39 @@
 {
-  "name": "vite-vue3.5",
-  "version": "1.0.0",
+  "name": "vue3-antd-admin",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite --mode development",
-    "build:hash": "vue-tsc --build --force && vite build --mode production_hash",
-    "build:history": "vue-tsc --build --force && vite build --mode production_history"
+    "build:test": "vue-tsc --build --force && vite build --mode production-test",
+    "build": "vue-tsc --build --force && vite build --mode production",
+    "dev:jcy": "vite --mode development-jcy",
+    "init-husky": "husky"
   },
   "dependencies": {
-    "axios": "^1.7.7",
-    "dayjs": "^1.11.13",
-    "element-plus": "^2.8.4",
+    "@bestime/scroll-bar": "^1.0.3",
+    "axios": "^1.12.2",
+    "dayjs": "^1.11.18",
+    "element-plus": "^2.12.0",
     "lodash-es": "^4.17.21",
-    "vue": "^3.5.11",
-    "vue-router": "^4.4.5"
+    "vue": "^3.5.22",
+    "vue-i18n": "^11.1.12",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@bestime/utils_build": "^1.0.3",
-    "@bestime/nine-ui-vue3": "^1.0.5",
-    "@tsconfig/node20": "^20.1.4",
+    "@tsconfig/node22": "^22.0.2",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.7.5",
-    "@vitejs/plugin-vue": "^5.1.4",
-    "@vue/tsconfig": "^0.5.1",
-    "sass": "^1.79.4",
-    "typescript": "~5.6.2",
-    "vite": "^5.4.8",
-    "vue-tsc": "^2.1.6"
+    "@types/node": "^24.7.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "@vue/tsconfig": "^0.8.1",
+    "sass-embedded": "^1.93.2",
+    "typescript": "~5.9.3",
+    "vite": "^7.1.9",
+    "vue-tsc": "^3.1.1",
+    "husky": "^9.1.7"
   }
 }
