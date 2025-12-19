@@ -102,8 +102,12 @@ watch(() => locale.value, function () {
 })
 
 onMounted(function () {
-  console.log("测试页加载了")
+  console.log("测试页-加载")
   updateList()
+})
+
+onBeforeUnmount(function () {
+  console.log("测试页-卸载")
 })
 </script>
 

@@ -116,7 +116,11 @@ async function onRefreshTab (key: string) {
 
 
 function toRemove (key: string) {
+  jUtilsBase.arrayRemove(state.aliveNames, function (item) {
+    return item === key
+  })
   iMenu.value?.removeTag(key)
+  
 }
 
 </script>
