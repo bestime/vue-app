@@ -9,7 +9,8 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import ElementPlus, { ElMessage } from 'element-plus'
 
 const notCheckPath = ['#/permission-preview', '#/login', '#/', '']
-const needCheck = notCheckPath.includes(window.location.hash)
+const urlHash = jUtilsBase.trim(window.location.hash).replace(/\?.*/, '')
+const needCheck = notCheckPath.includes(urlHash)
 const app = createApp(App)
 app.use(i18n);
 reloadRoutes(needCheck).then(function () {
