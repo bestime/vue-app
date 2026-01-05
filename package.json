@@ -10,6 +10,7 @@
     "dev": "vite --mode development",
     "build:test": "vue-tsc --build --force && vite build --mode production-test",
     "build": "vue-tsc --build --force && vite build --mode production",
+    "prepare": "husky",
     "dev:jcy": "vite --mode development-jcy"
   },
   "dependencies": {
@@ -21,7 +22,8 @@
     "vue-i18n": "^11.1.12",
     "vue-router": "^4.5.1"
   },
-  "devDependencies": {    
+  "devDependencies": {
+    "husky": "^9.1.7",
     "@tsconfig/node22": "^22.0.2",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.7.0",
