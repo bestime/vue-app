@@ -2,9 +2,10 @@ import { apiLoginLoginResultData } from "@/services";
 import type { Router, RouteRecordRaw } from 'vue-router';
 import { IS_DEV, PERMISSIONID_SHARE } from "@/utils/constant";
 import { PERMISSID_DEV } from "@/utils/constant";
-import { last } from "lodash-es";
 import router, { routeList } from "@/router";
 import { ElMessage } from "element-plus";
+
+import { updatePermissionRoutes } from '@bestime/nine-ui-vue3'
 
 
 /**
@@ -26,54 +27,6 @@ function getMetaPpermissionId (item: RouteRecordRaw) {
   return item.meta?.permissionId as string | undefined
 }
 
-/**
- * 筛选有权限的路由
- * @param data 
- * @param routeNames 
- * @returns 
- */
-function filterPermissionRoutes (data: Array<RouteRecordRaw>, routeNames: string[]) {
-  const newList = jUtilsBase.treeFilter(data, function (item) {
-    let isSafeIn = routeNames.includes(item.name as string)
-    if(!isSafeIn && jUtilsBase.isArray(item.children)) {
-      const it = jUtilsBase.deepFindItem(item.children, function (cd) {
-        return routeNames.includes(cd.name as string)
-      })
-      return !!it
-    }
-    return isSafeIn
-  })
-  return newList
-}
-
-/**
- * 根据权限更新路由表
- * @param router 路由实例
- * @param allRoutes 完整的路由表
- * @param routeNames 有权限的路由名
- */
-async function updatePermissionRoutes (router: Router, allRoutes: Array<RouteRecordRaw>, routeNames: string[]) {
-  const newRoutes = filterPermissionRoutes(allRoutes, routeNames)
-  const oldRoutes = router.getRoutes()
-  
-  for(let a =0;a<oldRoutes.length;a++) {
-    const na = oldRoutes[a]!.name
-    if(jUtilsBase.isString(na) && !routeNames.includes(na)) {
-      router.removeRoute(na)
-    }
-  }
-  
-  jUtilsBase.forEachTree(newRoutes, function (item, parent) {
-    if(item.name && !router.hasRoute(item.name)) {
-      const lastParent = last(parent)?.name
-      if(lastParent) {
-        router.addRoute(lastParent, item)
-      } else {
-        router.addRoute(item)
-      }      
-    }
-  })
-}
 
 /**
  * 获取当前有权限的路由（请等待权限刷新后再使用）

@@ -86,7 +86,7 @@ import {
   ArrowDownBold,
 } from '@element-plus/icons-vue'
 import type { IMenuItem} from '@/pages/System/components/TopHeader/lib'
-import { isActiveMenu } from '@/utils/tools';
+import { isActiveMenu } from '@bestime/nine-ui-vue3';
 
 
 const router = useRouter()

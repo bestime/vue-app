@@ -9,17 +9,12 @@
   padding: 0;
   flex-shrink: 0;  
   color:yellow;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--jsc-bg-color-1);
   :deep(.nine_size_box_body) {
     display: flex;
     flex-direction: column;    
-  }
-  .body {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--jsc-bg-color-1);
-    position:relative;
   }
   .route-box {
     flex: 1;
@@ -36,20 +31,17 @@
 </style>
 
 <template>
-  <NineSizeBox class="NormalScreen" :uiWidth="1920" :uiHeight="1080" v-model:mode="state.scaleMode" :control="state.control">
-    <div class="body" id="normal-screen-wrapper">
-      <div class="water-box">
-        <template v-if="state.inited">
-          <TopHeader/>
-          <RouterView class="route-box"/>
-        </template>
-      </div>      
-    </div>    
-  </NineSizeBox>
+  <div class="NormalScreen" id="normal-screen-wrapper">
+    <div class="water-box">
+      <template v-if="state.inited">
+        <TopHeader/>
+        <RouterView class="route-box"/>
+      </template>
+    </div>      
+  </div>    
 </template>
 
 <script lang="ts" setup>
-import NineSizeBox from '@/plugins/jcy/NineSizeBox/index.vue'
 import TopHeader from './components/TopHeader/index.vue'
 import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import { IS_DEV } from '@/utils/constant';

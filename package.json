@@ -14,7 +14,8 @@
     "init-husky": "husky"
   },
   "dependencies": {
-    "@bestime/scroll-bar": "^1.0.3",
+    "@bestime/utils_base": "^1.0.22",
+    "@bestime/utils_browser": "^1.0.14",
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
     "element-plus": "^2.12.0",
@@ -30,10 +31,10 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.1.1",
     "@vue/tsconfig": "^0.8.1",
+    "husky": "^9.1.7",
     "sass-embedded": "^1.93.2",
     "typescript": "~5.9.3",
     "vite": "^7.1.9",
-    "vue-tsc": "^3.1.1",
-    "husky": "^9.1.7"
+    "vue-tsc": "^3.1.1"
   }
 }

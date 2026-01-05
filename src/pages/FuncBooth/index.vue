@@ -67,7 +67,7 @@
 </style>
 
 <template>
-  <NineSizeBox class="FuncBooth" :uiWidth="1920" :uiHeight="1080" v-model:mode="state.scaleMode" :control="state.control">
+  <div class="FuncBooth" >
     <div class="body">
       
       
@@ -79,7 +79,7 @@
         <Card3DButton v-for="item in state.card3dList" :key="item.name" :item="item"/>
       </div>
     </div>
-  </NineSizeBox>  
+  </div>  
 </template>
 
 <script setup lang="ts">
@@ -88,7 +88,7 @@ import Card3DButton, { type ICard3dItem } from './components/Card3DButton/index.
 
 import { onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
-import NineSizeBox from '@/plugins/jcy/NineSizeBox/index.vue'
+
 import { serverURL } from '@/request';
 import { cloneDeep } from 'lodash-es';
 import { IS_DEV } from '@/utils/constant';
@@ -170,18 +170,8 @@ const all3Dlist:ICard3dItem[] = [
 ] as ICard3dItem[]
 
 const state = reactive({
-  control: false,
-  scaleMode: 'scale-stretch' as 'initial' | 'scale-stretch' | 'scale-aspect',
   card3dList: [] as ICard3dItem[]
 })
-
-
-
-if(IS_DEV) {
-  state.control = true
-  state.scaleMode = 'initial'
-}
-
 
 
 

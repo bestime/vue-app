@@ -1,5 +1,5 @@
 #!/bin/bash
-ALLOWED_EMAIL="11742954040@qq.com"
+ALLOWED_EMAIL="1174295440@qq.com"
 
 # 获取提交者邮箱
 email=$(git config user.email)

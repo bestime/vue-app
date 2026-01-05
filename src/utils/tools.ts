@@ -1,8 +1,5 @@
 import type { TLocals } from "@/i18n";
 import { LANGUAGE_KEY, TOKEN_KEY } from "./constant";
-import type { IMenuItem} from '@/pages/System/components/TopHeader/lib'
-
-
 
 /**
  * 移除当前账户token 
@@ -39,23 +36,4 @@ export function getLanguage() {
   const locale = (jUtilsBrowser.getStorage(LANGUAGE_KEY) || 'zh') as TLocals
   document.querySelector('html')?.setAttribute('lang', locale);  
   return locale
-}
-
-export function getActiveMenuPath (menuList: IMenuItem[], currentRouteName: string) {
-  return jUtilsBase.deepFindTreePath(menuList, function (item) {
-    return currentRouteName === item.routeName
-  }, {
-    id: 'routeName',
-    children: 'children'
-  })
-}
-
-export function isActiveMenu (menuList: IMenuItem[], currentRouteName: string, muenId: string) {
-  const path: IMenuItem[] = getActiveMenuPath(menuList, currentRouteName) ?? []
-  if(jUtilsBase.isArray(path) && path.length) {
-    return path.some(function (item) {
-      return item.routeName === muenId
-    })
-  }
-  return false
 }

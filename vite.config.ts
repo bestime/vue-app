@@ -84,6 +84,8 @@ export default defineConfig(function ({ mode }) {
     resolve: {
       alias: {
         '@': resolveNodePath('./src'),
+        '@bestime/nine-ui-vue3': resolveNodePath('./src/plugins/jcy/nine-ui-vue3'),
+        '@bestime/scroll-bar': resolveNodePath('./src/plugins/jcy/scroll-bar'),
       },
     },
     build: {

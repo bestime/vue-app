@@ -15,7 +15,9 @@
       "element-plus/global"
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@bestime/nine-ui-vue3": ["./src/plugins/jcy/nine-ui-vue3"],
+      "@bestime/scroll-bar": ["./src/plugins/jcy/scroll-bar"]
     }
   }
 }
