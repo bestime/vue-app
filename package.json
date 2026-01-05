@@ -11,7 +11,7 @@
     "build:test": "vue-tsc --build --force && vite build --mode production-test",
     "build": "vue-tsc --build --force && vite build --mode production",
     "dev:jcy": "vite --mode development-jcy",
-    "init-husky": "husky"
+    "prepare": "husky"
   },
   "dependencies": {
     "@bestime/utils_base": "^1.0.22",
