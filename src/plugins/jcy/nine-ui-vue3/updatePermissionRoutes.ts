@@ -1,6 +1,6 @@
-import type { Router, RouteRecordRaw } from 'vue-router';
+import { type Router, type RouteRecordRaw } from 'vue-router';
 import filterPermissionRoutes from './filterPermissionRoutes';
-import { forEachTree, isNull, isString } from '@bestime/utils_base';
+import { forEachTree, isNull, isString, parseQuery } from '@bestime/utils_base';
 import { last } from 'lodash-es';
 import getCurrentRouteFullPath from './getCurrentRouteFullPath'
 
@@ -12,6 +12,7 @@ import getCurrentRouteFullPath from './getCurrentRouteFullPath'
  */
 export default async function updatePermissionRoutes (router: Router, allRoutes: Array<RouteRecordRaw>, routeNames: string[], redirect?: boolean) {
   redirect = isNull(redirect) ? true : redirect
+  
   const newRoutes = filterPermissionRoutes(allRoutes, routeNames)
   const oldRoutes = router.getRoutes()
   
@@ -34,6 +35,7 @@ export default async function updatePermissionRoutes (router: Router, allRoutes:
   })
 
 
+  // console.log('redirect', redirect)
   if(redirect) {
     const fromPath = getCurrentRouteFullPath(router)
     if(fromPath) {
@@ -41,6 +43,10 @@ export default async function updatePermissionRoutes (router: Router, allRoutes:
         return c.path === fromPath
       })
       if(toRoute) {
+        const query = parseQuery(window.location.href)
+        // console.log("query", query)
+        // @ts-ignore
+        toRoute.query = query
         await router.replace(toRoute)
       }
     }
