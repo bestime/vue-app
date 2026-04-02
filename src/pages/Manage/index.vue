@@ -25,12 +25,14 @@
 
 <template>
   <div class="Manage">
-    <LayoutMenu ref="menu-ref" :collapsed="state.isOpen" @on-tab-change="onTabChange" :clearId="state.clearId" @on-menu-update="onMenuChange"/>
+    <LayoutMenu :collapsed="state.isOpen" @on-menu-update="onMenuChange"/>
     <div class="page-container">
+      <!-- <h1>唯一key：{{state.routeKey}}</h1>
+      <h2>{{state.aliveNames}}</h2>
+      <h2>缓存：{{state.aliveKeys}}</h2> -->
       <LayoutHeader v-model:collapsed="state.isOpen"/>
-      <!-- <h1>{{state.routeKey}}</h1>
-      <h2>{{state.aliveNames}}</h2> -->
-      <LayoutTabs :tags="state.tabList" @on-refresh="onRefreshTab" @on-remove="toRemove"/>
+      
+      <LayoutTabs  @on-refresh="onRefreshTab" @on-remove="toRemove" @on-add="onAddTab"/>
       <LayoutBreadcrumb :meunTree="state.menus"/>
       <RouterView #default="{Component, route}">
         <KeepAlive ref="ref-alive" :include="state.aliveNames">
@@ -42,85 +44,60 @@
 </template>
 
 <script lang="ts" setup>
-import {  cloneVNode, computed, nextTick, onBeforeUnmount, reactive, useTemplateRef, watch } from 'vue'
+import {  reactive, watch } from 'vue'
 import LayoutMenu, { type IMenuItem } from './components/LayoutMenu/index.vue'
 import LayoutTabs, { type ITabItem } from './components/LayoutTabs/index.vue'
 import LayoutHeader from './components/LayoutHeader/index.vue'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { cloneDeep } from 'lodash-es'
 import LayoutBreadcrumb from './components/LayoutBreadcrumb/index.vue'
 
-
 const route = useRoute()
-const iCache = useTemplateRef('ref-alive')
 const state = reactive({
   menus: [] as IMenuItem[],
-  clearId: 0,
   isOpen: false,
-  tabList: [] as ITabItem[],
   aliveNames: [] as string[],
   routeKey: '',
-  aliveKeys: {} as Record<string, {
-    count: number,
-    id: string
-  }>
+  aliveKeys: {} as Record<string, number>
 })
-
-const iMenu = useTemplateRef('menu-ref')
 
 function onMenuChange (v: IMenuItem[]) {
   state.menus = v
 }
 
-function onTabChange (data: ITabItem[], newKey?: string) {
-  const newOpen = !jUtilsBase.isNull(newKey) && !!state.aliveKeys[newKey] && !state.tabList.some(c=>c.routeName === newKey)
-  // console.log("是否重载", newOpen,newKey)
-  // console.log("tab列表", data)
-  state.tabList = data
-  if(newOpen) {
-    nextTick(function () {
-      onRefreshTab(newKey)
-    })
-  }  
-}
-
 function updateRouteKey () {
-  const currentComponentName = route.name as string
-  
-  if(jUtilsBase.isNull(state.aliveKeys[currentComponentName])) {
-    state.aliveKeys[currentComponentName] = {
-      count: 0,
-      id:`${currentComponentName}@0` 
-    }
-  }
-  const needCache = route.meta.cache === true
-  if(needCache === false) {
-    jUtilsBase.arrayRemove(state.aliveNames, (c) => c === currentComponentName)
-  } else if(!state.aliveNames.includes(currentComponentName)) {
-    state.aliveNames.push(currentComponentName)
-  }
-  state.routeKey = state.aliveKeys[currentComponentName].id
+  const useRtKey = route.fullPath as string
+  state.aliveKeys[useRtKey] = jUtilsBase._Number(state.aliveKeys[useRtKey])
+  state.routeKey = useRtKey + '→' + state.aliveKeys[useRtKey]
 }
-
-watch(() => route.name, updateRouteKey, {
-  immediate: true
-})
 
 async function onRefreshTab (key: string) {
   if(!jUtilsBase.isNull(state.aliveKeys[key])) {
-    const count = ++state.aliveKeys[key].count
-    state.aliveKeys[key].id = `${key}@${count}`    
+    const count = ++state.aliveKeys[key]
+    state.aliveKeys[key] = count
   }  
   updateRouteKey()
 }
 
-
-function toRemove (key: string) {
-  jUtilsBase.arrayRemove(state.aliveNames, function (item) {
-    return item === key
-  })
-  iMenu.value?.removeTag(key)
-  
+function onAddTab (tab: ITabItem) {
+  if(tab.cacheName) {
+    const exist = state.aliveNames.includes(tab.cacheName)
+    if(!exist) {
+      state.aliveNames.push(tab.cacheName)
+    }    
+  } else {
+    jUtilsBase.arrayRemove(state.aliveNames, (c) => c === tab.cacheName)
+  }
 }
 
+function toRemove (tag: ITabItem) {
+  // 仅清空缓存的组件就行
+  jUtilsBase.arrayRemove(state.aliveNames, function (item) {
+    return item === tag.cacheName
+  })  
+}
+
+
+watch(() => route.fullPath, updateRouteKey, {
+  immediate: true
+})
 </script>

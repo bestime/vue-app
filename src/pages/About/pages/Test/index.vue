@@ -9,10 +9,15 @@
 
 <template>
   <LoadingWrapper class="Test" :loading="state.loading">
-    <a-button @click="toDeta">跳转到测试页详情，菜单保持高亮</a-button>
     <ATableSizeBox class="table-panel"  style="height: 500px" :updateKey="state.tableUpdateId">
       <template #default="{ scroll }">
-        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns" />
+        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns">
+          <template #bodyCell="{ column, text, record }">
+            <template v-if="column.dataIndex === 'operate'">
+              <button @click="toShowDetail(record)">查看详情</button>
+            </template>
+          </template>
+        </a-table>
       </template>      
     </ATableSizeBox>    
   </LoadingWrapper>
@@ -45,11 +50,7 @@ defineOptions({
   name: 'ROUTE_TEST'
 })
 
-function toDeta () {
-  router.push({
-    name: 'ROUTE_TEST_DETAIL'
-  })
-}
+
 
 
 
@@ -71,6 +72,11 @@ function getColumns () {
       title: t('content'),
       dataIndex: 'mettingTopic',
       key: 'mettingTopic',
+    },
+    {
+      title: '操作',
+      dataIndex: 'operate',
+      key: 'operate',
     },
   ]
 }
@@ -94,6 +100,15 @@ async function updateList () {
   })
 }
 
+
+function toShowDetail (data: any) {
+  router.push({
+    name: 'ROUTE_TEST_DETAIL',
+    query: {
+      id: data.id
+    }
+  })
+}
 
 watch(() => locale.value, function () {
   state.tableColumns = getColumns()

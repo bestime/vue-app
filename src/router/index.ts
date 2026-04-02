@@ -1,6 +1,6 @@
 
 import { PERMISSIONID_SHARE } from '@/utils/constant'
-import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory, type RouteLocationNormalizedLoadedGeneric, type RouteRecordRaw } from 'vue-router'
 
 const routerMode = import.meta.env.VITE_ROUTER_MODE
 const baseUrl = import.meta.env.BASE_URL
@@ -20,7 +20,7 @@ export const routeList: Array<RouteRecordRaw> = [
     name: 'ROUTE_PERMISSIONPERVIEW',
     component: () => import('@/pages/PermissonsPerview/index.vue'),
     meta: {
-      cache: false,
+      cacheName: 'ROUTE_PERMISSIONPERVIEW',
       permissionId: PERMISSIONID_SHARE
     }
   },
@@ -29,7 +29,6 @@ export const routeList: Array<RouteRecordRaw> = [
     name: 'ROUTE_LOGIN_ROOT',
     component: () => import("@/pages/Login/index.vue"),
     meta: {
-      cache: false,
       deprecated: false,
       permissionId: PERMISSIONID_SHARE
     }
@@ -47,8 +46,12 @@ export const routeList: Array<RouteRecordRaw> = [
         name: 'ROUTE_HOME',
         component: () => import("@/pages/Home/index.vue"),
         meta: {
-          cache: true,
-          permissionId: PERMISSIONID_SHARE
+          cacheName: 'ROUTE_HOME',
+          cacheCannotRemove: true,
+          permissionId: PERMISSIONID_SHARE,
+          cacheTitle: function () {
+            return '首页'
+          }
         }
       },
       {
@@ -56,8 +59,23 @@ export const routeList: Array<RouteRecordRaw> = [
         name: 'ROUTE_ABOUT',
         component: () => import("@/pages/About/index.vue"),
         meta: {
-          cache: true,
-          permissionId: '模拟权限001'
+          cacheName: 'ROUTE_ABOUT',
+          permissionId: '模拟权限001',
+          cacheTitle: function () {
+            return '关于我们'
+          }
+        }
+      },
+      {
+        path: 'about-other',
+        name: 'ROUTE_ABOUT_OTHER',
+        component: () => import("@/pages/About/index.vue"),
+        meta: {
+          cacheName: 'ROUTE_ABOUT',
+          permissionId: '模拟权限001',
+          cacheTitle: function () {
+            return '关于其他'
+          }
         }
       },
       {
@@ -65,8 +83,11 @@ export const routeList: Array<RouteRecordRaw> = [
         name: 'ROUTE_TEST',
         component: () => import("@/pages/About/pages/Test/index.vue"),
         meta: {
-          cache: true,
-          permissionId: '模拟权限002'
+          cacheName: 'ROUTE_TEST',
+          permissionId: '模拟权限002',
+          cacheTitle: function () {
+            return '测试列表'
+          }
         }
       },
       {
@@ -74,8 +95,11 @@ export const routeList: Array<RouteRecordRaw> = [
         name: 'ROUTE_TEST_DETAIL',
         component: () => import("@/pages/About/pages/Test/Detail.vue"),
         meta: {
-          cache: true,
-          permissionId: '模拟权限002'
+          cacheName: 'ROUTE_TEST_DETAIL',
+          permissionId: '模拟权限002',
+          cacheTitle: function (route: RouteLocationNormalizedLoadedGeneric) {
+            return `详情-${route.query.id}`
+          }
         }
       },
       {

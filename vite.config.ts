@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
+import tailwindcss from '@tailwindcss/vite';
 
 function resolveNodePath (relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url))
@@ -74,7 +75,8 @@ export default defineConfig(function ({ mode }) {
         VITE_BUILD_TIME: new Date().getTime()
       }),
       vue(),
-      vueJsx()
+      vueJsx(),
+      tailwindcss()
     ],
     css: {
       postcss: {

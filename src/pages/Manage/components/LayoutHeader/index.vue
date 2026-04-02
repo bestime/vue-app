@@ -35,7 +35,7 @@
     </div>
     <div class="right">
       <a-dropdown>
-        <a class="ant-dropdown-link" @click.prevent>
+        <a class="ant-dropdown-link cursor-pointer" @click.prevent>
           {{state.userName}}
         </a>
         <template #overlay>
@@ -58,18 +58,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeUnmount, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import i18n, { type TLocals } from '@/i18n';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  PieChartOutlined,
-  MailOutlined,
-  DesktopOutlined,
-  InboxOutlined,
-  AppstoreOutlined,
-  GlobalOutlined
-} from '@ant-design/icons-vue';
+import { MenuFoldOutlined, MenuUnfoldOutlined, GlobalOutlined } from '@ant-design/icons-vue';
 import { apiLoginLoginResultData, apiLoginLogout } from '@/services';
 import { useRouter } from 'vue-router';
 import { setLanguage } from '@/utils/tools';
@@ -94,10 +85,6 @@ function toggle () {
   collapsed.value = !collapsed.value;
 };
 
-
-
-
-
 function clickLanguage (ev:any) {
   const locale: TLocals = ev.key
   document.querySelector('html')!.setAttribute('lang', locale);
@@ -108,7 +95,6 @@ function clickLanguage (ev:any) {
 
 onMounted(function () {
   state.currentLang = i18n.global.locale.value
-
   apiLoginLoginResultData().then(function (resp) {
     state.userName = jUtilsBase.defualtFormatter('-', resp.data.data?.user?.name)
   })

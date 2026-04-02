@@ -48,12 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeUnmount, computed } from 'vue'
+import { computed } from 'vue'
 import { type IMenuItem } from '../LayoutMenu/index.vue';
 import { useRoute, useRouter } from 'vue-router';
 import { cloneDeep } from 'lodash-es';
-
-
 
 interface IProps {
   meunTree: IMenuItem[]
@@ -85,8 +83,7 @@ const breadList = computed<TBread[]>(function () {
 
   if(hightItem) {
     list.push(hightItem)
-  }
-  
+  }  
 
   const result:TBread[] = cloneDeep(list) as TBread[]
   result.forEach(function (item) {
@@ -103,5 +100,4 @@ function toJump (item: TBread) {
     name: item.key
   })
 }
-
 </script>

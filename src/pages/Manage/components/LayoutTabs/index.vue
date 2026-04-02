@@ -23,18 +23,19 @@
 </style>
 
 <template>
+  <!-- <h1>高亮：{{activeKey}}</h1> -->
   <a-tabs class="LayoutTabs" :activeKey="activeKey" hide-add type="editable-card" @edit="removeTag" @change="onTabClick">
     <template #leftExtra>
       <span style="padding: 0 0 0 20px;"></span>
     </template>
     <a-tab-pane
-      v-for="pane in props.tags"
-      :key="pane.routeName"
-      :closable="pane.removeable && props.tags.length>1"
+      v-for="pane in state.tagList"
+      :key="pane.fullPath"
+      :closable="pane.removeable && state.tagList.length>1"
     >
       <template #tab>
         <span>{{ pane.label }}</span>
-        <ReloadOutlined class="tab-reload-icon" v-if="activeKey === pane.routeName" @click="toRefresh(route.name as string)"/>
+        <ReloadOutlined class="tab-reload-icon" v-if="activeKey === pane.fullPath" @click="toRefresh(route.fullPath as string)"/>
       </template>
     </a-tab-pane>
     <template #rightExtra>
@@ -52,21 +53,12 @@
 </template>
 
 <script lang="ts" setup>
-
-import { reactive, onBeforeUnmount, ref, computed, nextTick } from 'vue'
-import { useRoute, useRouter } from 'vue-router';
-import {
-  ReloadOutlined,
-  MenuUnfoldOutlined,
-  MoreOutlined,
-  PieChartOutlined,
-  MailOutlined,
-  DesktopOutlined,
-  InboxOutlined,
-  AppstoreOutlined,
-} from '@ant-design/icons-vue';
+import { reactive, computed, onMounted } from 'vue'
+import { onBeforeRouteUpdate, useRoute, useRouter, type RouteLocationNormalizedGeneric } from 'vue-router';
+import { ReloadOutlined, MoreOutlined } from '@ant-design/icons-vue';
 import { useI18n } from 'vue-i18n';
 import type { IMenuItem } from '../LayoutMenu/index.vue';
+import { routeList } from '@/router';
 const router = useRouter()
 const route = useRoute()
 const {t,locale} = useI18n({
@@ -87,57 +79,105 @@ const {t,locale} = useI18n({
   }
 })
 export interface ITabItem {
-  routeName: string,
+  cacheName: string
+  fullPath: string,
   label: string,
   removeable: boolean
   highlights?: IMenuItem[]
 }
 
-
-
-const activeKey = computed(function () {
-  
-  const cName = props.tags.find(function (t) {
-    return route.name === t.routeName || t?.highlights?.some(c=>c.key === route.name) || false
-  })?.routeName
-  return cName ?? ''
+const state = reactive({
+  tagList: [] as ITabItem[]
 })
 
-const props = defineProps<{
-  tags: ITabItem[]
-}>()
+const activeKey = computed(function () {
+  return route.fullPath
+})
 
+function onRouteUpdateCb (to: RouteLocationNormalizedGeneric) {
+  // @ts-ignore
+  const label = to.meta?.cacheTitle?.(to) ?? '请配置标题'
+  
+  if(!state.tagList.some(c=>c.fullPath === to.fullPath)) {
+    const item: ITabItem = {
+      fullPath: to.fullPath,
+      label,
+      cacheName: jUtilsBase.trim(to.meta.cacheName),
+      removeable: to.meta?.cacheCannotRemove !== true,
+      highlights: []
+    }
+    state.tagList.push(item)
+    emits('on-add', item)
+  }  
+}
+
+onBeforeRouteUpdate(function (to, from, next) {  
+  if(to.fullPath !== '') {
+    onRouteUpdateCb(to)
+  }  
+  next()
+})
+
+
+onMounted(function () {
+  const rcfHome = jUtilsBase.deepFindItem(routeList, function (item) {
+    return item.name === 'ROUTE_HOME'
+  })
+  const rpsHome = router.resolve(rcfHome!)
+  // @ts-ignore
+  onRouteUpdateCb(rpsHome)
+  onRouteUpdateCb(route)
+})
 
 const emits = defineEmits<{
   (name: 'on-refresh', key: string): void
   (name: 'on-cleared'): void
-  (name: 'on-remove', key: string): void
+  (name: 'on-remove', key: ITabItem): void
+  (name: 'on-add', data: ITabItem): void
 }>()
 
 function toRefresh (key: string) {  
   emits('on-refresh', key)
 }
 
-function onTabClick (name:any) {
-  router.push({
-    name
-  })
+function onTabClick (rullPath:any) {
+  router.push(rullPath)
 }
 
-function removeTag (uid: any) {
-  emits('on-remove', uid)
+function removeTag (fullPath: any) {  
+  // 关闭当前标签时，需要切换到最近一个标签（规则，优先向右，再向左）
+  if(fullPath === route.fullPath) {
+    const cidx = state.tagList.findIndex(c=>c.fullPath === fullPath)
+    let toIdx = jUtilsBase.changeIndex(state.tagList.length-1, cidx, 1)
+    if(toIdx === 0) {
+      toIdx = cidx - 1
+    }
+    router.push(state.tagList[toIdx]!.fullPath)
+  }
+  
+  // 再决定是否缓存组件
+  const toRemoveItem = state.tagList.find(c=>c.fullPath === fullPath)!
+  const toRemoveNum = state.tagList.filter(c=>c.cacheName === toRemoveItem.cacheName).length
+  if(toRemoveNum <= 1) {
+    emits('on-remove', toRemoveItem)
+  }
+  // 先移出列表
+  jUtilsBase.arrayRemove(state.tagList, function (item) {
+    return item.fullPath === fullPath
+  })  
 }
 
 function toCloseOther () {
-  props.tags.forEach(function (item) {
-    if(item.removeable && item.routeName !== activeKey.value) {
-      removeTag(item.routeName)
+  const firstTag = state.tagList.find(c=>c.fullPath !== activeKey.value && c.removeable)
+  if(firstTag) {
+    removeTag(firstTag.fullPath)
+    if(state.tagList.length>0) {
+      toCloseOther()
     }
-  })
+  }  
 }
 
 function clickTabMore (ev: any) {
-
   switch(ev.key) {
     case 'closeOther':
       toCloseOther()

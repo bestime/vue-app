@@ -17,6 +17,9 @@
 <script lang="ts" setup>
 import { reactive, onBeforeUnmount, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const { t } = useI18n({
   useScope: 'global',
@@ -29,8 +32,12 @@ const { t } = useI18n({
     },
   }
 })
+
+let flag = ''
+
 onMounted(function () {
-  console.log("关于我们加载了")
+  flag = JSON.stringify(route.fullPath)
+  console.log("关于我们加载了：", flag)
 })
 
 defineOptions({
@@ -38,6 +45,6 @@ defineOptions({
 })
 
 onBeforeUnmount(function () {
-  console.log("关于我们-卸载")
+  console.log("关于我们-卸载", flag)
 })
 </script>

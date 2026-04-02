@@ -149,6 +149,5 @@ export function getFirstRouteName () {
   if(!res) {
     message.error('请确认该账号权限是否配置正确！')
   }
-  console.log("第一个", res)
   return res
 }
