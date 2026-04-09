@@ -3,6 +3,7 @@ import { defineConfig, loadEnv, PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import tailwindcss from '@tailwindcss/vite';
+import { viteExternalsPlugin } from 'vite-plugin-externals'
 
 function resolveNodePath (relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url))
@@ -76,7 +77,13 @@ export default defineConfig(function ({ mode }) {
       }),
       vue(),
       vueJsx(),
-      tailwindcss()
+      tailwindcss(),
+      viteExternalsPlugin({
+        '@bestime/utils_base': 'jUtilsBase',
+        '@bestime/utils_browser': 'jUtilsBrowser',
+      }, {
+        useWindow: false
+      })
     ],
     css: {
       postcss: {
@@ -93,6 +100,7 @@ export default defineConfig(function ({ mode }) {
       cssTarget: 'chrome61',
       assetsDir: 'packed',
       rollupOptions: {
+        external: ['@bestime/utils_base', '@bestime/utils_browser'],
         output: {
           manualChunks: {
             mc_1: [ 'vue' ],
