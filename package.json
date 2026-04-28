@@ -14,13 +14,18 @@
     "dev:jcy": "vite --mode development-jcy"
   },
   "dependencies": {
+    "@bestime/utils_base": "git+https://gitee.com/bestime/npmmirror.git#jUtilsBase-v1.0.27",    
     "ant-design-vue": "^4.2.6",
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.21",        
     "vue": "^3.5.22",
     "vue-i18n": "^11.1.12",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+
+    "maptalks": "^1.12.1",
+    "turf": "^3.0.14",
+    "@types/turf": "^3.5.32"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.2",

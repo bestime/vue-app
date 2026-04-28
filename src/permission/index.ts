@@ -122,19 +122,18 @@ export async function reloadRoutes (disabled?: boolean) {
   })
   permissionIds = jUtilsBase._Array(res?.permissions).map(function (c: any) {
     return c.key
-  })
-  if(IS_DEV) {
+  })  
+  if(res && IS_DEV) {
     permissionIds = [
       '模拟权限002',
       '模拟权限001',
     ]
+    if(import.meta.env.VITE_APP_RUNMODE === '测试版') {
+      permissionIds.push(PERMISSID_DEV)
+    }
   }
-
-  if(import.meta.env.VITE_APP_RUNMODE === '测试版') {
-    permissionIds.push(PERMISSID_DEV)
-  } 
+  
   const pNames = getRouteNames()
-  // console.log("当前用户的权限", permissionIds)
   await updatePermissionRoutes(router, routeList, pNames)    
   return {
     permissionIds

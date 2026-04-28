@@ -134,9 +134,16 @@ export function serverURL(prefix: keyof typeof prefixMap, path: string) {
  * @returns
  */
 export async function requestLocalFile<T>(relativePath: string, query?: Record<string, any>){  
-  return request<T>({
-    baseURL: '@local',
-    url: relativePath,    
-    params: query
+  const params = Object.assign({
+    t: window.viteBuildTime
+  }, query)
+  const urlId = jUtilsBase.urlToGet(relativePath, params)
+  const task = jUtilsBase.cacheTask(urlId, function () {
+    return request<T>({
+      baseURL: '@local',
+      url: urlId,
+    })
   })
+  
+  return task.waitting()
 }

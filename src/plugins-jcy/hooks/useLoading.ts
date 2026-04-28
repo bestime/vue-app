@@ -5,7 +5,7 @@ import { computed, reactive, ref } from "vue";
  * @param data 初始状态
  * @returns 
  */
-export function useLoading (data=false) {
+export default function useLoading (data=false) {
   const state = reactive({
     visible: data,
     count: data ? 1 : 0

@@ -30,4 +30,4 @@ coverage
 *.tsbuildinfo
 
 # 允许个人库的文件
-!src/plugins/jcy/scroll-bar/dist
+!src/plugins-jcy/scroll-bar/dist

@@ -31,6 +31,7 @@ type BTDeepPartial<T = any> = {
  * */
 type TKvPair = Record<string | number | symbol, any>;
 type TValueOf<T> = T[keyof T];
+type TPromiseCb = (...args: any[]) => Promise<any>;
 
 /**
  * 判断数据是否为对象
@@ -124,7 +125,7 @@ interface Options {
   kvPair?: Boolean;
 }
 /**
- * 移除无效数据，包括：空字符串，空对象，空数组。
+ * 移除无效数据，包括：空字符串，空对象，空数组（但不会移除数组里面的空值）
  * 注：数组中的值不做处理，会影响数组长度
  *
  * @param data - 将数据进行树摇
@@ -164,16 +165,23 @@ interface IdataCacheCAllback {
    * @param success - 回调函数
    */
   get: (success: (data: any) => void) => void;
+  /**
+   * 重置缓存数据为初始状态
+   */
+  clear: () => void;
+  run: () => void;
   logs: Record<string, any>;
 }
 /**
+ * @deprecated 慎用
  * 对相同地址的数据进行缓存
  * @param url - 请求地址
  * @returns 处理工具
  */
 declare function dataCache(url: string, record?: Record<string, any>): IdataCacheCAllback;
 
-/**
+/** @deprecated 慎用，用不好会造成内存泄漏。可移步：readyTask
+ *
  * 检测一个数据是否存在
  *
  * @param handler - 每一次检测的回调， 返回值为Boolean,表示是否检测到数据
@@ -588,83 +596,6 @@ declare const fieldCheck: {
   };
 };
 
-interface ISummary {
-  /** 值 */
-  value: number;
-  /** 增长率 */
-  riseRatio?: number;
-  /** 比重 */
-  proportion: number;
-}
-interface IARTResultItem<T> {
-  name: string;
-  value: T;
-  data: Record<string, T[]>;
-  summary: Record<string, ISummary>;
-}
-type TArrayRowToColumnColumnSort = (a: string, b: string) => number;
-/**
- * 数字中某个字段由 行转列
- * @param originData - 原始数组
- * @param options - 配置项
- * @returns 转换后的数据
- */
-declare function arrayRowToColumn<T extends Record<string, any>>(
-  originData: T[],
-  options: {
-    /** 唯一行的ID生成器 */
-    uniqueRowId: Array<keyof T>;
-    /** 将此字段转为列 */
-    colField: keyof T;
-    /** 列的排序方法 */
-    colSort?: TArrayRowToColumnColumnSort;
-    /** 生成列信息 */
-    colCreate: (key: string) => {
-      label: string;
-      field: string;
-    };
-    summaryConfig?: IConfig;
-  }
-): {
-  columns: {
-    value: string;
-    label: string;
-    field: string;
-  }[];
-  data: IARTResultItem<T>[];
-  colSummary: Record<string, Record<string, ISummary>>;
-  getExtRow: <T_1 extends keyof ISummary>(
-    groupName: string,
-    field: T_1,
-    formatter: (data: ISummary[T_1]) => string
-  ) => Record<string, string>;
-};
-type TArrayRowToColumnCalculateRow = {
-  proportionBaseField?: string;
-  count:
-    | number
-    | {
-        field: string;
-        mode: 'length' | 'uniqLength' | 'notZeroValue';
-      };
-  value: {
-    field: string;
-    mode: 'sum' | 'uniqLength' | 'avg';
-  };
-};
-interface IConfig {
-  averageField: string;
-  row?: Record<string, TArrayRowToColumnCalculateRow>;
-  column?: TColSumaryConfig;
-}
-type TColSumaryConfig = Record<
-  string,
-  {
-    field: string;
-    mode: 'uniqLength' | 'avg' | 'notZeroLength' | 'sum';
-  }
->;
-
 type ISpanTableItem<T extends TKvPair> = T & {
   $rowSpan: Record<string, number>;
   $colField: Record<string | number, number>;
@@ -937,27 +868,6 @@ declare function parseTreeToTableHeader(header: IInputHeaderItem[]): {
   data: (IParsedHeaderDataItem | undefined)[][];
 };
 
-type TEcharts = Record<string, any>;
-interface IConnectConfigItem {
-  onXAxisCtegoryClick?: (xAxisData: any[], tickIndex: number, chart: TEcharts) => void;
-}
-interface IListItem {
-  config?: IConnectConfigItem;
-  instence: TEcharts;
-  onAxxisCategoryClick?: (ev: { tickIndex: number; needEmit?: boolean }) => void;
-  onAxxisSeriesClick?: (ev: any) => void;
-  timer_01: any;
-}
-declare class ConnectEcharts {
-  _list: Record<string, IListItem[]>;
-  constructor();
-  _resetGroupClickXAxisCategory(chartList: IListItem[]): void;
-  clickXAsisCategory(chart: TEcharts, index: number, notEmit?: boolean): void;
-  add(i: TEcharts, config: IConnectConfigItem): this;
-  remove(chart?: TEcharts): void;
-}
-declare const _default: ConnectEcharts;
-
 interface IRuleItem {
   min: number;
   max: number;
@@ -1197,23 +1107,6 @@ type ISortItem = number | undefined | null;
  */
 declare function sortCompare(way: 'asc' | 'desc', a: ISortItem, b: ISortItem): number | undefined;
 
-interface LogItem {
-  id: string;
-  time: string;
-  pid?: string;
-  title: string;
-  data?: string;
-}
-declare function logRecord(
-  title: string,
-  data?: string,
-  notPrint?: boolean
-): (title: string, data?: string) => void;
-declare function logExport(): {
-  flatList: LogItem[];
-  treeList: any[];
-};
-
 type TCallback = (ms: number) => void;
 type THander$1 = (callback: TCallback) => void;
 /**
@@ -1255,6 +1148,12 @@ declare class ServerDate {
   getTime(): number;
 }
 
+/**
+ * 将字符串按指定长度变为一个数组
+ * @param rowLength
+ * @param data
+ * @returns
+ */
 declare function breakString(rowLength: number, data?: string): string[];
 
 /**
@@ -1366,6 +1265,106 @@ type THander<T> = (item: T) => boolean;
  */
 declare function arrayRemove<T>(data: T[], handler: THander<T>): void;
 
+/**
+ * 将一维数组按几列分为二维数组
+ * @param data
+ * @param column
+ */
+declare function arrayGroupColumn<T>(data: T[], column: number): T[][];
+
+declare function formatRangeText(name: string, from: any, to: any, unit?: string): string;
+
+/**
+ * 判断数组里有没有重复ID
+ * @param key 键
+ * @param data 数组（可以是树结构）
+ * @returns 没有重复就返回原始数组
+ */
+declare function detectUniqueValues<T extends Record<string, any>>(key: keyof T, data: T[]): T[];
+
+interface INumConfig {
+  min?: number;
+  max?: number;
+  required?: boolean;
+  unit?: string;
+}
+/**
+ * 数字校验
+ * @param name 校验的名称
+ * @param data 校验的数据
+ * @param config 校验其他配置
+ * @returns
+ */
+declare function validatorNumbervalidatorNumber(
+  name: string,
+  data: any,
+  config?: INumConfig
+): {
+  success: boolean;
+  message: string;
+};
+
+/**
+ * 获取文件后缀名
+ * @param url
+ * @returns
+ */
+declare function getFileTypeFromUrl(url: string): string;
+
+/**
+ * 处理竞态问题，只认最后一个执行结果（一般用于异步场景）
+ * @param handler 实际处理函数
+ * @returns
+ *
+ * @example
+ * const taskApiGetData = raceTask(async function (message: string, duration: number) {
+ *    await sleep(duration)
+ *    return message
+ * })
+ */
+declare function raceTask<T extends TPromiseCb>(
+  handler: T
+): (this: ThisParameterType<T>, ...args: Parameters<T>) => Promise<ReturnType<T>>;
+
+/**
+ * 此方法用于准备工作，和等待准备工作完成。只认第一次执行结果！！！记得不用的时候销毁
+ *
+ * @param handler 处理函数
+ * @param FPS 每秒执行次数，默认值位5。限制范围为 [1-20]。没必要太小或太大，人眼感觉不出来
+ * @returns
+ */
+declare function readyTask<T extends TPromiseCb>(
+  handler: T,
+  fps?: number
+): {
+  waitting: () => Promise<Awaited<ReturnType<T>>>;
+  dispose: () => void;
+};
+
+/**
+ * 这个用于根据ID缓存数据，防止重复获取无变化的数据。在过期时间内，只认第一次执行结果！！！
+ * @param id
+ * @param handler
+ * @param cacheMillisecond 缓存多久后自动清空。单位：毫秒，默认3分钟。从第一次获取数据成功后开始记时
+ * @returns
+ */
+declare function cacheTask<T extends TPromiseCb>(
+  id: string,
+  handler: T,
+  cacheMillisecond?: number
+): {
+  waitting: () => Promise<Awaited<ReturnType<T>>>;
+  dispose: () => void;
+};
+
+/**
+ * 模板字符串插值，解析 {% abc %}的模板语法
+ * @param tpl
+ * @param params
+ * @returns
+ */
+declare function templateVarReplace(tpl: string, params: Record<string, string>): string;
+
 type TBusinessTypeKey = 1 | 2 | 3 | 4;
 interface IOption {
   headers: {
@@ -1450,6 +1449,121 @@ declare function zjxkjPerformanceTable(
   totalScore: number;
 };
 
+type TEcharts = Record<string, any>;
+interface IConnectConfigItem {
+  onXAxisCtegoryClick?: (xAxisData: any[], tickIndex: number, chart: TEcharts) => void;
+}
+interface IListItem {
+  config?: IConnectConfigItem;
+  instence: TEcharts;
+  onAxxisCategoryClick?: (ev: { tickIndex: number; needEmit?: boolean }) => void;
+  onAxxisSeriesClick?: (ev: any) => void;
+  timer_01: any;
+}
+declare class ConnectEcharts {
+  _list: Record<string, IListItem[]>;
+  constructor();
+  _resetGroupClickXAxisCategory(chartList: IListItem[]): void;
+  clickXAsisCategory(chart: TEcharts, index: number, notEmit?: boolean): void;
+  add(i: TEcharts, config: IConnectConfigItem): this;
+  remove(chart?: TEcharts): void;
+}
+declare const _default: ConnectEcharts;
+
+interface LogItem {
+  id: string;
+  time: string;
+  pid?: string;
+  title: string;
+  data?: string;
+}
+declare function logRecord(
+  title: string,
+  data?: string,
+  notPrint?: boolean
+): (title: string, data?: string) => void;
+declare function logExport(): {
+  flatList: LogItem[];
+  treeList: any[];
+};
+
+interface ISummary {
+  /** 值 */
+  value: number;
+  /** 增长率 */
+  riseRatio?: number;
+  /** 比重 */
+  proportion: number;
+}
+interface IARTResultItem<T> {
+  name: string;
+  value: T;
+  data: Record<string, T[]>;
+  summary: Record<string, ISummary>;
+}
+type TArrayRowToColumnColumnSort = (a: string, b: string) => number;
+/**
+ * 数字中某个字段由 行转列
+ * @param originData - 原始数组
+ * @param options - 配置项
+ * @returns 转换后的数据
+ */
+declare function arrayRowToColumn<T extends Record<string, any>>(
+  originData: T[],
+  options: {
+    /** 唯一行的ID生成器 */
+    uniqueRowId: Array<keyof T>;
+    /** 将此字段转为列 */
+    colField: keyof T;
+    /** 列的排序方法 */
+    colSort?: TArrayRowToColumnColumnSort;
+    /** 生成列信息 */
+    colCreate: (key: string) => {
+      label: string;
+      field: string;
+    };
+    summaryConfig?: IConfig;
+  }
+): {
+  columns: {
+    value: string;
+    label: string;
+    field: string;
+  }[];
+  data: IARTResultItem<T>[];
+  colSummary: Record<string, Record<string, ISummary>>;
+  getExtRow: <T_1 extends keyof ISummary>(
+    groupName: string,
+    field: T_1,
+    formatter: (data: ISummary[T_1]) => string
+  ) => Record<string, string>;
+};
+type TArrayRowToColumnCalculateRow = {
+  proportionBaseField?: string;
+  count:
+    | number
+    | {
+        field: string;
+        mode: 'length' | 'uniqLength' | 'notZeroValue';
+      };
+  value: {
+    field: string;
+    mode: 'sum' | 'uniqLength' | 'avg';
+  };
+};
+interface IConfig {
+  averageField: string;
+  row?: Record<string, TArrayRowToColumnCalculateRow>;
+  column?: TColSumaryConfig;
+}
+type TColSumaryConfig = Record<
+  string,
+  {
+    field: string;
+    mode: 'uniqLength' | 'avg' | 'notZeroLength' | 'sum';
+  }
+>;
+
 declare global {
   /**
    * 该声明文件用于全局声明（不用npm安装时拷贝到项目中直接使用）
@@ -1465,9 +1579,11 @@ declare global {
       _KvPair,
       _Number,
       _String,
+      arrayGroupColumn,
       arrayRemove,
       arrayRowToColumn,
       breakString,
+      cacheTask,
       changeIndex,
       checkPhone,
       cloneEasy,
@@ -1480,6 +1596,7 @@ declare global {
       deepFindTreePath,
       defineEventBus,
       defualtFormatter,
+      detectUniqueValues,
       difference,
       fieldCheck,
       fileSizeFormatter,
@@ -1492,10 +1609,12 @@ declare global {
       forEachKvPair,
       forEachTree,
       formatRange,
+      formatRangeText,
       formatTime,
       fuzzyReplace,
       getArray,
       getFileName,
+      getFileTypeFromUrl,
       getLikeNumberRegExp,
       getMinAndMax,
       getPiecesWithIndex,
@@ -1530,7 +1649,9 @@ declare global {
       param,
       parseQuery,
       parseTreeToTableHeader,
+      raceTask,
       randomColor,
+      readyTask,
       repeatArray,
       repeatString,
       rgbaToHex,
@@ -1542,6 +1663,7 @@ declare global {
       sortWithIndex,
       spanTable,
       split,
+      templateVarReplace,
       thousands,
       throttle,
       toCamelCase,
@@ -1552,6 +1674,7 @@ declare global {
       union,
       urlToGet,
       uuid,
+      validatorNumbervalidatorNumber as validatorNumber,
       variableHasValue,
       zjxkjPerformanceTable
     };

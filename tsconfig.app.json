@@ -2,6 +2,7 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "include": [
     "types/env.d.ts",
+    "types/global.d.ts",
     "src/**/*",
     "src/**/*.vue",
     "public/static/extends/jUtilsBase/umd/index.d.ts",
