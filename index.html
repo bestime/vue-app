@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <title>vue3项目模板</title>
     <link href="/static/css/reset.css" rel="stylesheet">
     <link href="/static/css/combine.css" rel="stylesheet">
     <script src="/static/extends/jUtilsBase/umd/index.min.cjs"></script>
     <script src="/static/extends/jUtilsBrowser/umd/index.min.cjs"></script>
+    <script src="/static/js/jsencrypt3.5.4.min.js"></script>
     <script>
+      window.__APP_PUBLICKKEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiphNDkeTp/hrS0xaWa1J\n3hb+GTLOd/yvDJXlabQXo8Nw9mBcbMgAEoD20L/MVN4zQCtUYmeQ71eRb50/TMmy\nvIzf2G0wPz2Xwuh9z03G+pmJzVBimdjNgYfhsWXe+iwM3CRWbAxZ52fIq+3NZEid\nhxC414Or5dFfHoHaDmxh94Jaqun2wjYzpsHeMl3KTrsZ11YkRhCXnUJsRcfbV2Z2\nuhdNva0AuPa0YXXxHi12wLPfm2pLGXylvWKO4QmJqoFULjAB4cJnGNkAgmTQdIm6\ncKOJQx1yVwJHjJOYYSGS33krM4gbtK72I1bHl2nQt380pvKoW7zalmNTxxQjb8T+\nSwIDAQAB"
+      window.__APP_PRIVATEKEY = "MIIEpAIBAAKCAQEAiphNDkeTp/hrS0xaWa1J3hb+GTLOd/yvDJXlabQXo8Nw9mBc\nbMgAEoD20L/MVN4zQCtUYmeQ71eRb50/TMmyvIzf2G0wPz2Xwuh9z03G+pmJzVBi\nmdjNgYfhsWXe+iwM3CRWbAxZ52fIq+3NZEidhxC414Or5dFfHoHaDmxh94Jaqun2\nwjYzpsHeMl3KTrsZ11YkRhCXnUJsRcfbV2Z2uhdNva0AuPa0YXXxHi12wLPfm2pL\nGXylvWKO4QmJqoFULjAB4cJnGNkAgmTQdIm6cKOJQx1yVwJHjJOYYSGS33krM4gb\ntK72I1bHl2nQt380pvKoW7zalmNTxxQjb8T+SwIDAQABAoIBAGUbSkt6iAtnvM5H\nuznkoxiz6Vb0q4749bLWv2/ng79iWsxB6+sn1HWrQ2NyKFxZZUYQ1hSbvS390gl8\ny6r3Eb9ffgVjUmkwQ8Ba3z0WXmx/CfqQA/58HR+7wzgpOwuCizcmAy37rLKWEdzr\nNIVOPC1GU7JVSlfz79JPpIYVJzrp+DPOdUdeSAbMSj+l7CL6zhSrLSmlWDOIXtk/\nX2zldvVfGvKsUCF0rytnOs+CDVucICzodzU7MU3tqdl+PjS6VYhJlMy1EnYmwsU/\ndu2HsTBHzxx5Iy8+JS/xMrizADTsKwgeWtq/BX1xqnc3cOA5gCiiv8gYyrVkcHx+\nrBBjroECgYEAynFf50afs1NuEXJNq2QRS9/7tPEWOy1fp85jZlHdT9OX0wdiWv6e\nozhsJuNLQ0AYSVBcXp+kL6TsNgDloleFf7OfErOs66P1tWB5MDkJXvrwq3NxLVlu\n+I5M87Y604evnChBvtcKzEBo9e+s266g1I6WOis4R0zpL8Fm1PhQLSECgYEAr0LE\nWBSUcAq9WnaphLkLDvvVaGuSRRYsSHffhaFDGBXU514Kzm8sO0SRr86L0Ton2EFk\nMf11LL5D85gDpkhpNf37Uq0jCJ3oYBcPZ2ekC/Sz6JKDHc3WiagxygV1aJxVgUVK\nAmPImDVqJs8VbJejyLjPW5gVA8jgabC3QJJAcesCgYEAjSRWdOysU16LkuZaeHAg\nDwJuf0zG7yNHWbtvWdshrZIcfCjdzgtPlwSzgrlds9lwFU1N2Tr8Qat+dHhTocfb\nb5lQAr36hZ+eo4JLe++INQxH14F5GuELmYe85v3aLbigGwOGMwPCp30QsMcVgWRT\nBV8UJiIT7sIUohL5Guq1G4ECgYEAjUQa8Qg9kYYGlJlbEGD62ewBWzaB4u/5Z7w/\nzf1rEEngn1F9EmIn2+nsKDIrHs1qenRS57xtq0/9g6Z/IpPxQhTjdAOcXoCxYmqT\n/vxaDU0Diq41w1s71x9caoM13MlOXnFUM1LsyEsdsgRvN2WPHeZhNWoDXlaXFHnd\na8225lsCgYAj6W/1hT2amGNR76zLJJmpHo2GeIjOghj2jz3wbJo4tvOHyc/6wa8+\nTjihUNPBUEe7ouRlWmLW09ohrai4LCw64+I8v2eKwsK6UAozzouZTkmff4RkeTiK\navls2RJHHelEniCvfuMokS8wsFudCk7Bo7dDPn6d8dWoczR3TUTsWw=="
       window.devicePixelRatio = 2
       window.viteBuildTime = Number("{% VITE_BUILD_TIME %}")
       console.log("项目构建时间：", jUtilsBase.formatTime(window.viteBuildTime))

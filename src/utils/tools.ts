@@ -39,3 +39,29 @@ export function getLanguage() {
   document.querySelector('html')?.setAttribute('lang', locale);  
   return locale
 }
+
+
+const rsa = new JSEncrypt();
+rsa.setPublicKey(window.__APP_PUBLICKKEY);
+rsa.setPrivateKey(window.__APP_PRIVATEKEY);
+
+/**
+ * 数据加密
+ * @param data 
+ * @returns 
+ */
+export function encodeMessage(data: string) {
+  const res = rsa.encrypt(data)
+  return res === false ? '加密失败' : res
+}
+
+
+/**
+ * 数据解密
+ * @param data 
+ * @returns 
+ */
+export function decodeMessage(data: string) {
+  const res = rsa.decrypt(data);
+  return res === false ? "解密失败" : res;
+}

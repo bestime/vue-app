@@ -11,7 +11,7 @@
   <LoadingWrapper class="Test" :loading="state.loading">
     <ATableSizeBox class="table-panel"  style="height: 500px" :updateKey="state.tableUpdateId">
       <template #default="{ scroll }">
-        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns">
+        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns" :pagination="false">
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'operate'">
               <button @click="toShowDetail(record)">查看详情</button>
@@ -19,7 +19,8 @@
           </template>
         </a-table>
       </template>      
-    </ATableSizeBox>    
+    </ATableSizeBox>
+    <AntdPagerWidget :data="pager.state" @on-change="onPageChange"/>
   </LoadingWrapper>
 </template>
 
@@ -28,10 +29,15 @@ import { reactive, onBeforeUnmount, onMounted, watch } from 'vue'
 import { apiThreemeetingArchiveGetThreeMeetingArchiveList } from '@/services'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import LoadingWrapper from '@/components/LoadingWrapper/index.vue'
-import ATableSizeBox from '@/components/ATableSizeBox/index.vue'
+import LoadingWrapper from '@/plugins-jcy/components/LoadingWrapper/index.vue'
+import ATableSizeBox from '@/plugins-jcy/components/ATableSizeBox/index.vue'
+import AntdPagerWidget from '@/plugins-jcy/components/AntdPagerWidget/index.vue'
+import usePager from '@/plugins-jcy/hooks/usePager'
 
 const router = useRouter()
+
+const pager = usePager([5, 36])
+pager.set(5, 100)
 
 const { t, locale } = useI18n({
   useScope: 'global',
@@ -52,14 +58,20 @@ defineOptions({
 
 
 
+function onPageChange (page: number, size: number) {
+  console.log("分页变化", page, size)
+}
+
 
 
 const state = reactive({
+  
   tableUpdateId: '',
   loading: false,
   tableColumns: [] as any[],
   testData: [] as any[]
 })
+
 
 function getColumns () {
   return [

@@ -14,13 +14,13 @@
 </style>
 
 <template>
-  <div class="flex gap-1 items-center" style="margin: 20px;">
+  <div class="gap-1" style="margin: 20px;">
     
     
   </div>
   
   <div class="Home">
-    <section class="flex items-center justify-center">{{t('welcome')}}{{ t('global.systemName') }}</section>    
+    <section class="jy-flex jy-items-center jy-justify-center">{{t('welcome')}}{{ t('global.systemName') }}</section>
   </div>  
   
   <Demo/>

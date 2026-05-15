@@ -1,6 +1,3 @@
-<style lang="css">
-@import "tailwindcss/utilities";
-</style>
 
 <template>
   <a-config-provider :locale="antdLocal" :theme="state.antdTheme">

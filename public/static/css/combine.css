@@ -1,6 +1,142 @@
-.cmb-inset-0 {
+.jy-reset {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+  background-color: transparent;
+  border-spacing: 0;
+  font-style: normal;
+}
+.jy-border-box {
+  box-sizing: border-box;
+}
+
+.jy-user-select-none {
+  user-select: none;
+}
+
+.jy-flex {
+  display: flex;
+}
+
+.jy-flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.jy-flex-1 {
+  flex:1;
+  flex-shrink: 0;
+}
+
+.jy-items-center {
+  align-items: center;
+}
+
+.jy-items-stretch {
+  align-items: stretch;
+}
+
+.jy-items-start {
+  align-items: start;
+}
+
+.jy-items-end {
+  align-items: end;
+}
+
+.jy-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.jy-absolute {
+  position: absolute;
+}
+
+.jy-relative {
+  position: relative;
+}
+
+.jy-justify-center {
+  justify-content: center;
+}
+
+.jy-shrink-0 {
+  flex-shrink: 0;
+}
+
+.jy-overflow-hidden {
+  overflow: hidden;
+}
+
+.jy-justify-between {
+  justify-content: space-between;
+}
+
+.jy-justify-start {
+  justify-content: flex-start;
+}
+
+.jy-justify-around {
+  justify-content: space-around;
+}
+.jy-justify-end {
+  justify-content: flex-end;
+}
+
+.jy-flex-auto {
+  flex: 1 0 auto;
+}
+
+.jy-inset-0 {
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
 }
+
+.jy-flex-col-center-start {
+  display:flex;
+  align-items:center;
+  justify-content: start;
+  flex-direction: column;
+}
+
+.jy-absolute-50 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.jy-text-justify {
+  text-align: justify;
+}
+.jy-text-center {
+  text-align: center;
+}
+.jy-break-all {
+  word-break: break-all;
+}
+
+.jy-self-stretch {
+  align-self: stretch;
+}
+
+/** 三角：左下角 */
+.jy-triangle-left-bottom {
+  display: inline-block;
+  clip-path: polygon(0 0, 0 100%, 100% 100%);
+}
+
+
+.jy-mg-horizontal-auto {
+  margin: 0 auto;
+}
+
+.jy-bg-size-100 {
+  background-size: 100% 100%;
+}
+

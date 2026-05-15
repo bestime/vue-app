@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import useLoading from '@/plugins-jcy/hooks/useLoading';
 import { reactive, onBeforeUnmount } from 'vue'
-import LoadingWrapper from '@/components/LoadingWrapper/index.vue'
+import LoadingWrapper from '@/plugins-jcy/components/LoadingWrapper/index.vue'
 const loading = useLoading(false)
 
 function toLoading (reset: boolean) {

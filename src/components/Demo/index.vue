@@ -24,11 +24,11 @@
 </style>
 
 <template>
-    <div class="Demo flex items-start">
+    <div class="Demo jy-flex jy-items-start">
       <ul>
         <li v-for="item in demoList" :key="item.id" @click="onSelect(item.id)" :class="{'is-selected': item.id === state.activeCpId}">{{item.title}}</li>
       </ul>
-      <div class="flex-1 rightbox">
+      <div class="jy-flex-1 rightbox">
         <component :is="realComponent"/>
       </div>
       
@@ -65,6 +65,13 @@ const demoList = [
     title: 'maptalks-飞行marker',
     component: defineAsyncComponent(function () {
       return import("@/components/Demo/components/Example04.vue")
+    }) 
+  },
+  {
+    id:'5',
+    title: 'hooks-echarts',
+    component: defineAsyncComponent(function () {
+      return import("@/components/Demo/components/Example05.vue")
     }) 
   },
 ]

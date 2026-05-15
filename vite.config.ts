@@ -2,7 +2,6 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import tailwindcss from '@tailwindcss/vite';
 import { viteExternalsPlugin } from 'vite-plugin-externals'
 
 function resolveNodePath (relativePath: string) {
@@ -77,7 +76,6 @@ export default defineConfig(function ({ mode }) {
       }),
       vue(),
       vueJsx(),
-      tailwindcss(),
       viteExternalsPlugin({
         '@bestime/utils_base': 'jUtilsBase',
         '@bestime/utils_browser': 'jUtilsBrowser',

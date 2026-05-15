@@ -1,6 +1,6 @@
 {
   "name": "vue3-antd-admin",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -14,21 +14,20 @@
     "dev:jcy": "vite --mode development-jcy"
   },
   "dependencies": {
-    "@bestime/utils_base": "git+https://gitee.com/bestime/npmmirror.git#jUtilsBase-v1.0.27",    
+    "@bestime/utils_base": "git+https://gitee.com/bestime/npmmirror.git#jUtilsBase-v1.0.29",
+    "@types/turf": "^3.5.32",
     "ant-design-vue": "^4.2.6",
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
-    "lodash-es": "^4.17.21",        
-    "vue": "^3.5.22",
-    "vue-i18n": "^11.1.12",
-    "vue-router": "^4.5.1",
-
+    "echarts": "^6.0.0",
+    "lodash-es": "^4.17.21",
     "maptalks": "^1.12.1",
     "turf": "^3.0.14",
-    "@types/turf": "^3.5.32"
+    "vue": "^3.5.22",
+    "vue-i18n": "^11.1.12",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.2.2",
     "@tsconfig/node22": "^22.0.2",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^24.7.0",
@@ -37,7 +36,6 @@
     "@vue/tsconfig": "^0.8.1",
     "husky": "^9.1.7",
     "sass-embedded": "^1.93.2",
-    "tailwindcss": "^4.2.2",
     "typescript": "~5.9.3",
     "vite": "^7.1.9",
     "vite-plugin-externals": "^0.6.2",
