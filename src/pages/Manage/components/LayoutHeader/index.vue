@@ -25,6 +25,14 @@
     gap: 15px;
   }
 }
+
+.user-icon {
+  background-color: #e5f0ff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #1677ff;
+}
 </style>
 
 <template>
@@ -35,9 +43,15 @@
     </div>
     <div class="right">
       <a-dropdown>
-        <a class="ant-dropdown-link cursor-pointer" @click.prevent>
-          {{state.userName}}
-        </a>
+        <div class="jy-flex jy-items-center jy-gap-10">
+          <div class="user-icon jy-flex jy-items-center jy-justify-center">
+            <UserOutlined />
+          </div>
+          <a class="ant-dropdown-link" @click.prevent>
+            {{state.userName}}
+          </a>
+        </div>
+        
         <template #overlay>
           <a-menu>
             <a-menu-item @click="toLogout">退出登录</a-menu-item>
@@ -60,7 +74,7 @@
 <script lang="ts" setup>
 import { reactive, onMounted } from 'vue'
 import i18n, { type TLocals } from '@/i18n';
-import { MenuFoldOutlined, MenuUnfoldOutlined, GlobalOutlined } from '@ant-design/icons-vue';
+import { MenuFoldOutlined, MenuUnfoldOutlined, GlobalOutlined, UserOutlined } from '@ant-design/icons-vue';
 import { apiLoginLoginResultData, apiLoginLogout } from '@/services';
 import { useRouter } from 'vue-router';
 import { setLanguage } from '@/utils/tools';

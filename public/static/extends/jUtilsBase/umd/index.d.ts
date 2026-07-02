@@ -151,55 +151,6 @@ declare function shake<T extends TargetData>(data: T, options?: Options): BTDeep
  */
 declare function _Array<T>(data: any): T[];
 
-/** 数据缓存工具提供的方法 */
-interface IdataCacheCAllback {
-  /** 检查对应url是否已经有缓存标记 */
-  isExist: () => boolean;
-  /**
-   * 为对应url设置缓存树
-   * @param data - 缓存的数据
-   */
-  set: (data: any) => void;
-  /**
-   * 获取缓存数据
-   * @param success - 回调函数
-   */
-  get: (success: (data: any) => void) => void;
-  /**
-   * 重置缓存数据为初始状态
-   */
-  clear: () => void;
-  run: () => void;
-  logs: Record<string, any>;
-}
-/**
- * @deprecated 慎用
- * 对相同地址的数据进行缓存
- * @param url - 请求地址
- * @returns 处理工具
- */
-declare function dataCache(url: string, record?: Record<string, any>): IdataCacheCAllback;
-
-/** @deprecated 慎用，用不好会造成内存泄漏。可移步：readyTask
- *
- * 检测一个数据是否存在
- *
- * @param handler - 每一次检测的回调， 返回值为Boolean,表示是否检测到数据
- * @param callback - 成功回调
- * @param sleepTime - 间隔时间
- */
-declare function variableHasValue(
-  handler: () => boolean | undefined,
-  callback: () => void,
-  sleepTime?: number
-): void;
-declare namespace variableHasValue {
-  var async: (
-    handler: () => boolean | undefined,
-    sleepTime?: number | undefined
-  ) => Promise<unknown>;
-}
-
 /**
  * 查找某个元素所在树的所有父链
  * @param tree - 数据
@@ -902,21 +853,6 @@ type TreeItem$1<T extends TKvPair> = T & {
  */
 declare function treeLeafs<T extends TKvPair>(list: TreeItem$1<T>[]): TreeItem$1<T>[];
 
-/**
- * 默认数据处理
- * @param placeValue - 无值时返回什么数据
- * @param value - 需要处理的数据。默认将 undefined、null、'' 视为无值
- * @param formatter - 数据格式化
- * @param whiteList 特殊需求。默认将 [‘-’] 也视为空数据
- * @returns
- */
-declare function defualtFormatter<T, R>(
-  placeValue: R,
-  value: T,
-  formatter?: (value: NonNullable<T>) => R,
-  whiteList?: string[]
-): R;
-
 type TEasingHandler = (
   passTime: number,
   fromValue: number,
@@ -982,23 +918,6 @@ declare function throttle<T extends EventHander>(
   (this: any, ...v: Parameters<T>): void;
   cancel(): void;
   dispose(): void;
-};
-
-/**
- *
- * @deprecated 已废弃，请使用getMinAndMax
- * 将一堆数字中的极值按差值的比例进行扩大。多用于echarts坐标轴的极值限制
- *
- * @param ratio 扩大倍数
- * @param data 数据
- * @returns
- */
-declare function padMinMax(
-  ratio: number,
-  ...data: Array<Array<number | undefined>>
-): {
-  min: number | undefined;
-  max: number | undefined;
 };
 
 type TreeItem<T extends TKvPair> = T & {
@@ -1178,16 +1097,6 @@ declare function getWeeks(
   to: string;
 }[];
 
-type TVu = string | number;
-/**
- * 格式化一个范围
- * @param from 起始值
- * @param to 终止值
- * @param connector 连接符
- * @returns
- */
-declare function formatRange(from?: TVu, to?: TVu, connector?: string): string;
-
 /**
  * 获取一个路径的文件名（最后一级的名称）
  * @param path 原始路径
@@ -1205,30 +1114,8 @@ declare function repeatArray<T>(target: T[], length: number): T[];
 
 declare function checkPhone(data: any): boolean;
 
-type TReturnV = number | undefined;
 /**
- * 获取数字中的最小和最大值
- * @param data - 原始数据
- * @param config - 额外配置项
- * @param config.spaceRatio - 默认值：0，根据最小、最大值的差值，将最小值减小几倍，将最大值增大几倍
- * @param config.getter - 迭代函数（复杂结构需要），默认仅处理数字
- * @param config.formatter - 将最终结果格式化
- * @returns 计算后的最大、最小值
- */
-declare function getMinAndMax<T>(
-  data: Array<T>,
-  config?: {
-    spaceRatio?: number;
-    getter?: (item: T) => TReturnV;
-    formatter?: (item: number) => number;
-  }
-): {
-  min: TReturnV;
-  max: TReturnV;
-};
-
-/**
- * 创建一个ID生成器，用于将字符串变为ID，相同字符串ID不变（进当前会话有效，不可用于固定ID）
+ * 创建一个ID生成器，用于将字符串变为ID，相同字符串ID不变（仅当前会话有效，不可用于固定ID）
  * @param prefix
  * @returns
  */
@@ -1271,8 +1158,6 @@ declare function arrayRemove<T>(data: T[], handler: THander<T>): void;
  * @param column
  */
 declare function arrayGroupColumn<T>(data: T[], column: number): T[][];
-
-declare function formatRangeText(name: string, from: any, to: any, unit?: string): string;
 
 /**
  * 判断数组里有没有重复ID
@@ -1364,6 +1249,73 @@ declare function cacheTask<T extends TPromiseCb>(
  * @returns
  */
 declare function templateVarReplace(tpl: string, params: Record<string, string>): string;
+
+type TReturnV$1 = number | undefined;
+/**
+ * 取集合中的最小值，最大值，并扩大一定范围（不会去控制范围边界，这个由外部业务处理，比如最小值：0）
+ *
+ * @param data 集合
+ * @param ratio 扩大比例，根据极值之差计算
+ * @param getter 迭代回调
+ * @param decimals 期望小数位
+ * @returns
+ */
+declare function minMax<T>(
+  data: T[],
+  ratio: number,
+  getter?: (item: T) => TReturnV$1,
+  decimals?: number
+): {
+  min: TReturnV$1;
+  max: TReturnV$1;
+};
+
+/**
+ * 简易获取值，支持默认值和格式化
+ * @param data 原始数据
+ * @param defaultValue 默认数据。默认将 undefined、null、'', '-' 视为无值
+ * @param formatter 自定义格式化
+ * @param path 链式路径
+ * @param whiteList 空数据白名单。默认：[‘-’]
+ * @returns
+ */
+declare function get<T, R>(
+  data: T,
+  defaultValue: R,
+  formatter?: (value: NonNullable<T>) => R,
+  path?: string,
+  whiteList?: string[]
+): R;
+
+interface IMonthDay {
+  date: string;
+  week: number;
+  timestamp: number;
+  targetMonth: boolean;
+}
+type TBeginWeek = 'sunday' | 'monday';
+/**
+ * 获取一份日历数据。日和周请根据数据自行格式化。
+ * @param year 年
+ * @param month 月
+ * @param beginWeek 第一列为周一还是周日
+ * @returns
+ */
+declare function calendar(year: number, month: number, beginWeek?: TBeginWeek): IMonthDay[][];
+
+/**
+ * 格式化一个范文字符串
+ * @param from
+ * @param connector
+ * @param to
+ * @returns
+ */
+declare function rangeText(from: any, connector: string, to: any): string;
+
+/**
+ * 是不是空对象，用与判断数组或键值对
+ */
+declare function isEmptyObject(data: any): boolean;
 
 type TBusinessTypeKey = 1 | 2 | 3 | 4;
 interface IOption {
@@ -1522,7 +1474,7 @@ declare function arrayRowToColumn<T extends Record<string, any>>(
       label: string;
       field: string;
     };
-    summaryConfig?: IConfig;
+    summaryConfig?: IConfig$1;
   }
 ): {
   columns: {
@@ -1551,7 +1503,7 @@ type TArrayRowToColumnCalculateRow = {
     mode: 'sum' | 'uniqLength' | 'avg';
   };
 };
-interface IConfig {
+interface IConfig$1 {
   averageField: string;
   row?: Record<string, TArrayRowToColumnCalculateRow>;
   column?: TColSumaryConfig;
@@ -1563,6 +1515,136 @@ type TColSumaryConfig = Record<
     mode: 'uniqLength' | 'avg' | 'notZeroLength' | 'sum';
   }
 >;
+
+/** 数据缓存工具提供的方法 */
+interface IdataCacheCAllback {
+  /** 检查对应url是否已经有缓存标记 */
+  isExist: () => boolean;
+  /**
+   * 为对应url设置缓存树
+   * @param data - 缓存的数据
+   */
+  set: (data: any) => void;
+  /**
+   * 获取缓存数据
+   * @param success - 回调函数
+   */
+  get: (success: (data: any) => void) => void;
+  /**
+   * 重置缓存数据为初始状态
+   */
+  clear: () => void;
+  run: () => void;
+  logs: Record<string, any>;
+}
+/**
+ * @deprecated 慎用
+ * 对相同地址的数据进行缓存
+ * @param url - 请求地址
+ * @returns 处理工具
+ */
+declare function dataCache(url: string, record?: Record<string, any>): IdataCacheCAllback;
+
+/**
+ * @deprecated 已废弃，单词拼写错误，请使用 “get”，新增了链式路径查找
+ *
+ * 默认数据处理
+ * @param placeValue - 无值时返回什么数据
+ * @param value - 需要处理的数据。默认将 undefined、null、'' 视为无值
+ * @param formatter - 数据格式化
+ * @param whiteList 特殊需求。默认将 [‘-’] 也视为空数据
+ * @returns
+ */
+declare function defualtFormatter<T, R>(
+  placeValue: R,
+  value: T,
+  formatter?: (value: NonNullable<T>) => R,
+  whiteList?: string[]
+): R;
+
+/**
+ * @deprecated
+ * @param name
+ * @param from
+ * @param to
+ * @param unit
+ * @returns
+ */
+declare function formatRangeText(name: string, from: any, to: any, unit?: string): string;
+
+type TVu = string | number;
+/**
+ * @deprecated 格式化一个范围
+ * @param from 起始值
+ * @param to 终止值
+ * @param connector 连接符
+ * @returns
+ */
+declare function formatRange(from?: TVu, to?: TVu, connector?: string): string;
+
+type TReturnV = number | undefined;
+interface IConfig<T> {
+  spaceRatio?: number;
+  decimals?: number;
+  getter?: (item: T) => TReturnV;
+  formatter?: (item: number) => number;
+}
+/**
+ * @deprecated 已废弃，请使用minMax
+ *
+ * 获取数字中的最小和最大值
+ * @param data - 原始数据
+ * @param config - 额外配置项
+ * @param config.spaceRatio - 默认值：0，根据最小、最大值的差值，将最小值减小几倍，将最大值增大几倍
+ * @param config.getter - 迭代函数（复杂结构需要），默认仅处理数字
+ * @param config.formatter - 将最终结果格式化（这个选项准备移除）
+ * @returns 计算后的最大、最小值
+ */
+declare function getMinAndMax<T>(
+  data: Array<T>,
+  config?: IConfig<T>
+): {
+  min: number | undefined;
+  max: number | undefined;
+};
+
+/**
+ *
+ * @deprecated 已废弃，请使用minMax
+ *
+ * 将一堆数字中的极值按差值的比例进行扩大。多用于echarts坐标轴的极值限制
+ *
+ * @param ratio 扩大倍数
+ * @param data 数据
+ * @returns
+ */
+declare function padMinMax(
+  ratio: number,
+  ...data: Array<Array<number | undefined>>
+): {
+  min: number | undefined;
+  max: number | undefined;
+};
+
+/** @deprecated 慎用，用不好会造成内存泄漏。可移步：readyTask
+ *
+ * 检测一个数据是否存在
+ *
+ * @param handler - 每一次检测的回调， 返回值为Boolean,表示是否检测到数据
+ * @param callback - 成功回调
+ * @param sleepTime - 间隔时间
+ */
+declare function variableHasValue(
+  handler: () => boolean | undefined,
+  callback: () => void,
+  sleepTime?: number
+): void;
+declare namespace variableHasValue {
+  var async: (
+    handler: () => boolean | undefined,
+    sleepTime?: number | undefined
+  ) => Promise<unknown>;
+}
 
 declare global {
   /**
@@ -1584,6 +1666,7 @@ declare global {
       arrayRowToColumn,
       breakString,
       cacheTask,
+      calendar,
       changeIndex,
       checkPhone,
       cloneEasy,
@@ -1612,6 +1695,7 @@ declare global {
       formatRangeText,
       formatTime,
       fuzzyReplace,
+      get,
       getArray,
       getFileName,
       getFileTypeFromUrl,
@@ -1628,6 +1712,7 @@ declare global {
       hexToRgba,
       isArray,
       isEmpty,
+      isEmptyObject,
       isFunction,
       isFuzzyMatch,
       isKvPair,
@@ -1641,6 +1726,7 @@ declare global {
       main as mapTree,
       max,
       min,
+      minMax,
       mixInZeroWidthUnicode,
       numberToChinese,
       padEnd,
@@ -1651,6 +1737,7 @@ declare global {
       parseTreeToTableHeader,
       raceTask,
       randomColor,
+      rangeText,
       readyTask,
       repeatArray,
       repeatString,

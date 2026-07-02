@@ -14,6 +14,22 @@ export default function usePager (sizes: number[]) {
     set (current: number, total: number) {
       state.current = current
       state.total = total
+    },
+    /**
+     * 后端接口不统一，有些接口分页从0开始，有些接口从1开始
+     * @param current 当前页
+     * @param beginZero 是否从0开始（默认从1开始）
+     * @returns 
+     */
+    query (current?: number ,beginZero?: boolean) {
+      let pageIndex = jUtilsBase.get(current, state.current)
+      if(beginZero) {
+        pageIndex--
+      }
+      return {
+        pageIndex,
+        pageSize: state.size
+      }
     }
   }
 }

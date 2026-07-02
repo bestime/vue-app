@@ -1,3 +1,8 @@
+@keyframes jy-spin-animation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .jy-reset {
   margin: 0;
   padding: 0;
@@ -10,6 +15,7 @@
   border-spacing: 0;
   font-style: normal;
 }
+
 .jy-border-box {
   box-sizing: border-box;
 }
@@ -29,7 +35,6 @@
 
 .jy-flex-1 {
   flex:1;
-  flex-shrink: 0;
 }
 
 .jy-items-center {
@@ -54,6 +59,9 @@
 
 .jy-absolute {
   position: absolute;
+}
+.jy-fixed {
+  position: fixed;
 }
 
 .jy-relative {
@@ -115,10 +123,18 @@
   text-align: justify;
 }
 .jy-text-center {
+  word-break: break-all;
   text-align: center;
 }
 .jy-break-all {
   word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+.jy-text-keep-all {
+  word-break: keep-all;
+  white-space: nowrap;
 }
 
 .jy-self-stretch {
@@ -131,6 +147,23 @@
   clip-path: polygon(0 0, 0 100%, 100% 100%);
 }
 
+/** 三角：左上角 */
+.jy-triangle-left-top {
+  display: inline-block;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+/** 三角：中上角 */
+.jy-triangle-center-top {
+  display: inline-block;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+/** 三角：中下角 */
+.jy-triangle-center-bottom {
+  display: inline-block;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
 
 .jy-mg-horizontal-auto {
   margin: 0 auto;
@@ -140,3 +173,111 @@
   background-size: 100% 100%;
 }
 
+.jy-self-center {
+  align-self: center;
+}
+.jy-self-end {
+  align-self: end;
+}
+
+
+.jy-w-100 {
+  width: 100%;
+}
+.jy-h-100 {
+  height: 100%;
+}
+.jy-wh-100 {
+  width: 100%;
+  height: 100%;
+}
+
+.jy-height-0 {
+  height: 0;
+}
+.jy-width-0 {
+  width: 0;
+}
+.jy-overflow-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.jy-img-contain {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.jy-gap-5 {
+  gap: 5px;
+}
+.jy-gap-10 {
+  gap: 10px;
+}
+
+.jy-gap-20 {
+  gap: 20px;
+}
+.jy-mb-10 {
+  margin: 0 0 10px 0;
+}
+.jy-mt-10 {
+  margin: 10px 0 0 0;
+}
+.jy-ml-10 {
+  margin: 0 0 0 10px;
+}
+.jy-mr-10 {
+  margin: 0 10px 0 0;
+}
+
+.jy-ml-auto {
+  margin: 0 0 0 auto;
+}
+
+.jy-height-10 {
+  height: 10px;
+}
+
+
+
+.jy-ellipsis-1 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.jy-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.jy-ellipsis-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.jy-text-indent-2 {
+  text-indent: 2em;
+}
+
+.jy-cursor-pointer {
+  cursor: pointer;
+}
+
+.jy-block {
+  display: block;
+  width: auto;
+}

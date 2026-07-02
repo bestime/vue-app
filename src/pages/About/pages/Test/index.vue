@@ -33,6 +33,7 @@ import LoadingWrapper from '@/plugins-jcy/components/LoadingWrapper/index.vue'
 import ATableSizeBox from '@/plugins-jcy/components/ATableSizeBox/index.vue'
 import AntdPagerWidget from '@/plugins-jcy/components/AntdPagerWidget/index.vue'
 import usePager from '@/plugins-jcy/hooks/usePager'
+import type { TableColumnType } from 'ant-design-vue'
 
 const router = useRouter()
 
@@ -68,7 +69,7 @@ const state = reactive({
   
   tableUpdateId: '',
   loading: false,
-  tableColumns: [] as any[],
+  tableColumns: [] as TableColumnType[],
   testData: [] as any[]
 })
 

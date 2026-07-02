@@ -20,6 +20,7 @@ const {locale} = useI18n()
 
 
 const state = reactive({
+  hashed: false,
   antdTheme: {
     "token": {
       "colorPrimary": "#1db915",
