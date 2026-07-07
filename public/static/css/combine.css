@@ -137,6 +137,7 @@
   white-space: nowrap;
 }
 
+
 .jy-self-stretch {
   align-self: stretch;
 }
@@ -280,4 +281,11 @@
 .jy-block {
   display: block;
   width: auto;
+}
+
+
+.jy-break-pre-wrap {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }

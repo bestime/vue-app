@@ -45,13 +45,6 @@ const state = reactive({
 })
 
 
-async function getHeader () {
-  await jUtilsBase.variableHasValue.async(function () {
-    console.log("还好", oRoot.value!)
-    return !!oRoot.value!.getElementsByClassName('ant-table-thead')[0]
-  }, 500)
-}
-
 const updateSize = debounce(async function (fromName: string, el: HTMLElement) {
   // await getHeader()
   const iHheader = el.getElementsByClassName('ant-table-thead')[0] as HTMLDivElement |undefined  
@@ -74,7 +67,7 @@ const updateSize = debounce(async function (fromName: string, el: HTMLElement) {
   }
   state.scroll.x = '100%'
   state.scroll.y = el.offsetHeight - headerHeight - footerHeight + 'px'
-  console.log("执行更新", fromName, '=>',state.scroll, el.offsetHeight, iHheader?.offsetHeight,footerHeight, footer)
+  // console.log("执行更新", fromName, '=>',state.scroll, el.offsetHeight, iHheader?.offsetHeight,footerHeight, footer)
 }, 150,{
   leading: true
 })
