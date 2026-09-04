@@ -36,6 +36,9 @@ export async function apiLoginDoLogin(options?: IRquestBase) {
     url: '/login/do-login',
     method: 'POST',
     ...options,
+  }).then(function (resp) {
+    jUtilsBrowser.setCookie('Token', resp.data.data.token, 1000 * 60 * 60 * 24 * 7)
+    return resp
   })
 }
 
