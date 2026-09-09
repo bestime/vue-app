@@ -1,26 +1,32 @@
 <style lang="scss" scoped>
 .Test {
   box-sizing: border-box;
-  padding: 20px;
-  background-color: white;
   margin: 20px;
 }
+
+.footer-slot {
+  background: white;
+  padding: 20px;
+}
+
 </style>
 
 <template>
-  <LoadingWrapper class="Test" :loading="state.loading">
-    <ATableSizeBox class="table-panel"  style="height: 500px" :updateKey="state.tableUpdateId">
+  <LoadingWrapper class="Test jy-flex-1 jy-flex-col jy-height-0" :loading="state.loading">
+    <ATableSizeBox class="jy-flex-1 jy-height-0 jy-mb-20">
       <template #default="{ scroll }">
-        <a-table :scroll="scroll" :dataSource="state.testData" :columns="state.tableColumns" :pagination="false">
+        <a-table :scroll="{x: 850}" :dataSource="state.testData" :columns="state.tableColumns" :pagination="false">
           <template #bodyCell="{ column, text, record }">
             <template v-if="column.dataIndex === 'operate'">
               <button @click="toShowDetail(record)">查看详情</button>
             </template>
           </template>
         </a-table>
-      </template>      
-    </ATableSizeBox>
-    <AntdPagerWidget :data="pager.state" @on-change="onPageChange"/>
+      </template>
+      <template #footer>
+        <AntdPagerWidget :data="pager.state" @on-change="onPageChange"/>        
+      </template> 
+    </ATableSizeBox>    
   </LoadingWrapper>
 </template>
 
@@ -66,8 +72,6 @@ function onPageChange (page: number, size: number) {
 
 
 const state = reactive({
-  
-  tableUpdateId: '',
   loading: false,
   tableColumns: [] as TableColumnType[],
   testData: [] as any[]
@@ -90,6 +94,7 @@ function getColumns () {
       title: '操作',
       dataIndex: 'operate',
       key: 'operate',
+      width: '400px'
     },
   ]
 }
@@ -107,7 +112,6 @@ async function updateList () {
     }
   }).then(function (res) {
     state.testData = res.data.data
-    state.tableUpdateId = jUtilsBase.uuid()
   }).finally(function () {
     state.loading = false
   })

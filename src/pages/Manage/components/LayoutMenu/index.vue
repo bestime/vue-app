@@ -21,8 +21,9 @@
         display: none;
       }
     }
-    :deep(.ant-menu) {
+    :deep(.ant-menu-dark) {
       width: auto !important;
+      
       .ant-menu-item {
         width: 40px !important;
         flex-shrink: 0;
@@ -33,13 +34,6 @@
         padding:0 12px !important;
       }
     }
-  }
-  :deep(){
-    .ant-menu-item {
-      box-sizing: border-box;
-      width: auto !important;
-    }
-    
   }
 }
 .logo-box {
@@ -70,6 +64,7 @@
       <span class="g-keep-all">{{ t('global.systemName') }}</span>
     </div>
     <a-menu
+      class="g-el-menu-01-root"
       :openKeys="props.collapsed ? undefined : openKeys"
       :selectedKeys="openKeys"
       mode="inline"
@@ -160,9 +155,13 @@ function getMenuList ():IMenuItem[] {
     },
   ]
   const allRoutes = router.getRoutes()
-  return jUtilsBase.treeFilter(list, function (item) {
+  const realList =  jUtilsBase.treeFilter(list, function (item) {
+    // @ts-ignore
+    item.popupClassName = "g-el-menu-01-popper"
     return allRoutes.some(c=>c.name === item.key)
   })
+
+  return realList
 }
 
 const state = reactive({

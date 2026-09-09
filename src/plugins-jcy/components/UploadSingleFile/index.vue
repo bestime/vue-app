@@ -10,6 +10,8 @@
     :before-upload="beforeUpload"
     :showUploadList="false"
     :customRequest="readyUpload"
+    :accept="accept"
+    :disabled="state.loading"
   >
     <slot/>
   </a-upload>
@@ -17,17 +19,19 @@
 
 <script lang="ts" setup>
 import { message, Upload, type UploadProps } from 'ant-design-vue';
-import { reactive, onBeforeUnmount } from 'vue'
+import { reactive, onBeforeUnmount, computed } from 'vue'
 import { useI18n } from 'vue-i18n';
 
 const uploadFileTypeMap = {
   'png': 'image/png',
   'jpg': 'image/jpeg',
   'gif': 'image/gif',
+  'xls':'application/vnd.ms-excel',
   'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'doc':'application/msword',
   'pdf': 'application/pdf',
-  'zpi': 'application/x-zip-compressed',
+  'zip': 'application/x-zip-compressed',
 }
 
 
@@ -42,6 +46,12 @@ interface IProps {
 const props = defineProps<IProps>()
 
 export type TUploadCallback = () => void
+
+const accept = computed(function () {
+  return props.types.map(function (k) {
+    return uploadFileTypeMap[k]
+  }).join(', ')
+})
 
 const emits = defineEmits<{
   (name: 'on-upload', data: File, next: TUploadCallback): void
@@ -64,7 +74,6 @@ const state = reactive({
 })
 
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
-  console.log("文件", file)
   const passType = props.types.some(function (tp) {
     return uploadFileTypeMap[tp] === file.type
   })
