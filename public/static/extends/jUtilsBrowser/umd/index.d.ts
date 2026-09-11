@@ -428,7 +428,102 @@ declare class WaterMark {
   _draw(): void;
 }
 
-declare const style: (str: string) => void;
+interface IConfig {
+  width?: number;
+  height?: number;
+  fontSize?: number;
+}
+declare function graphicalVerificationCode(
+  oCanvas: HTMLCanvasElement,
+  config?: IConfig
+): {
+  refresh: () => string;
+};
+
+type TCb = () => void;
+/**
+ * 还没开发完
+ * @param el
+ * @param callback
+ */
+declare function lazyContainer(el: Element, callback: TCb): void;
+
+/**
+ * 图片设置加载顺序。0开始，值越大优先级越低
+ * @param groupName 分组。每个分组中的sort独立计算
+ * @param imgId 图片ID。不用element的原因是可能节点移除后导致内部删除失效
+ * @param el 图片节点
+ * @param src 图片地址
+ * @param sort 图片顺序
+ * @returns
+ */
+declare function loadSortImage(
+  groupName: string,
+  imgId: string,
+  el: HTMLImageElement,
+  src: string,
+  sort: number
+): {
+  add: (id: string, el: HTMLImageElement, src: string, sort: number) => void;
+  remove: (id: string, sort: number) => void;
+};
+
+interface ICustomEchartsTooltip {
+  /** 根节点className */
+  rootClassName?: 'g-echarts-tool-tip';
+  /** 标题 */
+  title: string;
+  /** 子标题 */
+  subTitle?: string;
+  /** 列表项 */
+  list: Array<{
+    color: string;
+    name: string;
+    value: string;
+    unit?: string;
+    /** 值放几行 */
+    valueEllipsis?: 1 | 2 | 3;
+  }>;
+}
+/**
+ * 自定义echarts的tooltip。对标题，值、单位的个性化。需要自行实现样式。默认根节点类名为 g-echarts-tool-tip
+ * @param res 组装的数据
+ * @returns
+ */
+declare function createEchartsToolTip(res: ICustomEchartsTooltip): string;
+
+type TFunLibHander = (callback: () => void) => void;
+type TFunLibHanderPromise = () => Promise<void>;
+/**
+ * 用于dom动画入场动画失效的hack。确保dom已经加载并渲染
+ * @returns
+ */
+declare function nextTick(libNextTickHander?: TFunLibHander | TFunLibHanderPromise): Promise<void>;
+
+/**
+ * 将部分属性变为可选
+ */
+type TPartialOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+interface IWaterfallFlowConfig {
+  el: HTMLElement;
+  gap: number;
+  /**
+   * 自动播放在第一次主动执行 resize 后生效（避免首次渲染过渡动画卡顿）
+   */
+  autoResize?: number;
+}
+declare class WaterfallFlow {
+  private _cfg;
+  private _timer;
+  constructor(config: TPartialOptional<IWaterfallFlowConfig, 'gap'>);
+  _autoPlay(): void;
+  resize(): void;
+  pause(): this;
+  dispose(): void;
+}
+
+declare const style: (data: string) => void;
 
 declare global {
   /**
@@ -440,9 +535,11 @@ declare global {
       SeamlessRolling,
       TextRainCanvas,
       WaterMark,
+      WaterfallFlow,
       addClass,
       _default as browser,
       copyText,
+      createEchartsToolTip,
       createXLSX,
       downloadFileByArrayBuffer,
       downloadFileByBolb,
@@ -454,8 +551,12 @@ declare global {
       getRelativePos,
       getStorage,
       getWindowSize,
+      graphicalVerificationCode,
       infoContainerPosition,
+      lazyContainer,
       libraryFile,
+      loadSortImage,
+      nextTick,
       observeDomResize,
       export_default as observeDomScroll,
       observeMouseWheel,
