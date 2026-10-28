@@ -32,6 +32,7 @@ const emits = defineEmits<{
   (name: 'on-change', page: number, size: number): void
 }>()
 function onPageChange (page: number, size:number) {
+  page = Math.max(1, page)
   props.data.current = page
   props.data.size = size
   commitEmitChange()

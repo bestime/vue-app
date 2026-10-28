@@ -27,12 +27,12 @@ import useDelayToggle from '@/plugins-jcy/hooks/useDelayToggle';
 const dyEnter = useDelayToggle()
 
 function onEnter (tag: string) {
-  dyEnter.show(tag)
   console.log("移入", tag)
+  dyEnter.show(tag)
 }
 function onLeave (tag: string) {
-  dyEnter.close(tag)
   console.log("移出", tag)
+  dyEnter.close(tag)
 }
 
 </script>

@@ -2,6 +2,10 @@ import EchartsProxy, { type IConfig } from '@/plugins-jcy/EchartsProxy'
 import { onBeforeMount, onBeforeUnmount, onMounted, watch, type ShallowRef } from "vue";
 import type { ECharts, EChartsOption } from 'echarts'
 
+interface ISetting {
+  onInstenceChange?: (instence: ECharts) => void
+}
+
 /**
  * 简化echarts操作
  * 1. 不再关心dom是否挂载
@@ -10,13 +14,16 @@ import type { ECharts, EChartsOption } from 'echarts'
  * @param config 其他配置
  * @returns 
  */
-export default function useEcharts (el: Readonly<ShallowRef<HTMLDivElement | null>>, config?:IConfig) {
+export default function useEcharts (el: Readonly<ShallowRef<HTMLDivElement | null>>, config?:IConfig, setting?:ISetting) {
   const iChartProxy = new EchartsProxy(config)
   
   
   watch(() => el.value, function () {
     if(el.value) {
-      iChartProxy.setDom(el.value)
+      const i = iChartProxy.setDom(el.value)
+      if(setting?.onInstenceChange) {
+        setting.onInstenceChange(i)
+      }
     } else {
       iChartProxy.removeDom()
     }
@@ -32,6 +39,6 @@ export default function useEcharts (el: Readonly<ShallowRef<HTMLDivElement | nul
   return {
     setOption: function (data:EChartsOption) {
       iChartProxy.setOption(data)
-    }
+    },
   }
 }

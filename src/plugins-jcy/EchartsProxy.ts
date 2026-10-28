@@ -45,7 +45,6 @@ export default class EchartsProxy {
 
   setDom (data: HTMLDivElement) {    
     this.removeDom()
-    console.log("图表-显示")
     this._el = data
     this._instence = echarts.init(data);
     if(this._oldOptions) {
@@ -55,6 +54,8 @@ export default class EchartsProxy {
     if(this._config?.resize) {
       this._obvRsize = jUtilsBrowser.observeDomResize(data, this.resize, ['width', 'height'], 500)
     }
+
+    return this._instence
   }
 
   removeDom () {
@@ -68,7 +69,7 @@ export default class EchartsProxy {
   
 
   dispose () {
-    console.log("图表-销毁")
+    // console.log("图表-销毁")
     this.removeDom()
     this._oldOptions = undefined
     // @ts-ignore

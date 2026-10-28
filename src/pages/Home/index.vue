@@ -27,11 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-
-import { reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import useLoading from '@/plugins-jcy/hooks/useLoading'
-import useDelayToggle from '@/plugins-jcy/hooks/useDelayToggle';
 import Demo from '@/components/Demo/index.vue'
 
 
